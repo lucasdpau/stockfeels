@@ -37,11 +37,17 @@ def login_required(function):
 def register(username, password):
     hashed_pass = password_hash(password)
     connect = sqlite3.connect(DATABASE)
-    db = connect.cursor()
-    #WARNING PLEASE SANITIZE INPUT 
-    db.execute("INSERT INTO regusers (username, password) VALUES (\"{}\", \"{}\")".format(username, hashed_pass))
+    db = connect.cursor() 
+    #CHECKs IF USERNAME IS TAKEN
+    db.execute("SELECT username FROM regusers WHERE username =?", (username,))
+    check_duplicate_username = db.fetchall()
+    if len(check_duplicate_username) > 0:
+        return False
+    else:
+        db.execute("INSERT INTO regusers (username, password) VALUES (?,?)", (username, hashed_pass))
     db.close()
     connect.commit()
+    return True
     
 def login(username, password):
     #hash password
@@ -51,25 +57,44 @@ def login(username, password):
     hashed_pass = password_hash(password)
     connect = sqlite3.connect(DATABASE)
     db = connect.cursor()
-    #WARNING PLEASE SANITIZE INPUT 
-    db.execute("SELECT username, password FROM regusers WHERE username = \"{}\"".format(username))
+    db.execute("SELECT userid, username, password FROM regusers WHERE username =?", (username,))
     user_info_from_db = db.fetchall()
     db.close()
     connect.commit()    
     for returned_entries in user_info_from_db:
         if hashed_pass in returned_entries:
+            user_id = returned_entries[0]
             return True
         else:
             return False
+
+def get_user_id(username):
+    connect = sqlite3.connect(DATABASE)
+    db = connect.cursor()
+    db.execute("SELECT userid FROM regusers WHERE username =?", (username,))
+    userid_from_db = db.fetchall()
+    db.close()
+    connect.commit()    
+    for returned_entries in userid_from_db:
+        return returned_entries[0]
             
 
 def test_db_get_regusers():
     #WARNING. PASSWORDS NOT ENCRYPTED YET
     connect = sqlite3.connect(DATABASE)
     db = connect.cursor()
-    #WARNING PLEASE SANITIZE INPUT 
     db.execute("SELECT * FROM regusers")
     stuff = db.fetchall()
     db.close()
     connect.commit()
     return stuff
+
+
+
+def enter_transaction():
+    connect = sqlite3.connect(DATABASE)
+    db = connect.cursor()
+    #WARNING PLEASE SANITIZE INPUT 
+    db.execute("INSERT INTO transactions () VALUES (\"\")")
+    db.close()
+    connect.commit()    

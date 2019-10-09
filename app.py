@@ -17,6 +17,15 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
+#DeBUGGING PAGES
+@app.route('/success', methods=['GET'])
+def success():
+    return render_template('test.html')
+
+@app.route('/fail', methods=['GET'])
+def fail():
+    return render_template('testfail.html')
+
 
 @app.route('/', methods=['GET'])
 def get_index():
@@ -30,20 +39,33 @@ def get_register():
         return render_template('register.html')
     
     elif request.method == 'POST':
-        #TODO
-        return render_template('register.html')
+        submitted_username, submitted_pass = request.form.get("username"), request.form.get("password")
+        #register functions returns bool depending on if theres a duplicate username
+        if functions.register(submitted_username, submitted_pass):
+            return render_template('register.html')
+        else:
+            return redirect('/')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    #TODO Fix commented out session functionality
+    #session.clear()
     if request.method == 'GET':
         return render_template('login.html')
-    
     else:
-        submitted_username = request.form.get("username")
-        session.clear()
+        if not request.form.get("username"):
+            return redirect('/fail')
+        elif not request.form.get("password"):
+            return redirect('/fail')
+            #return apology("must provide password", 403)  
+            
+        submitted_username, submitted_pass = request.form.get("username"), request.form.get("password")
+        if not functions.login(submitted_username, submitted_pass):
+            return redirect('/fail')
         
-        return redirect('/')
-
+        else:
+            #session["user_id"] = functions.get_user_id(submitted_username) #this may have to be changed to the userid int, instead of username
+            return redirect('/success')
 
 
 @app.route('/profile', methods=['GET'])
@@ -51,6 +73,15 @@ def login():
 def profile():
     #TODO
     return render_template('profile.html')
+
+@app.route('/entry', methods=['GET', 'POST'])
+@login_required
+def entry():
+    #TODO
+    if request.method == 'POST':
+        pass
+    else:
+        return render_template('entry.html')
 
 @app.route('/logout', methods=['GET'])
 def logout():

@@ -1,8 +1,14 @@
 {% extends "layout_template.html" %}
 {% block main %}
+    <div class="split">
+        <div class="left">
+            <img src="/static/stockfeels.jpg" class="frontimg">
+        </div>
+        <div class="right">
+            <a href="register"> REGISTER HERE!</a>            
+        </div>
+    </div>
     <div>
-        <a href="register"> REGISTER HERE!</a>
-        <br>
         {{ test_str }}
     </div>
 {% endblock %}

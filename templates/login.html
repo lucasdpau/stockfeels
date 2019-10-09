@@ -1,12 +1,12 @@
 {% extends "layout_template.html" %}
 {% block main %}
 <div>
-    <form>
-        Username <input type="text">
-        Password <input type="text">
+    <form method="POST">
+        Username <input type="text" name="username">
+        Password <input type="password" name="password">
         <input type="submit">
     </form>
-    FORM FOR REGISTRATION, PASSWORD
+    FORM FOR LOGIN
 </div>
 
 {% endblock %}
