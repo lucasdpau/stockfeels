@@ -2,5 +2,16 @@ header {
     text-align: center;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 2em;
-    background-color: lawngreen;
+    background-color: rgb(175, 255, 101);
+}
+
+footer {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: rgb(206, 224, 241);
+}
+
+.topnavbar{
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: rgb(206, 224, 241);
 }

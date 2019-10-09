@@ -3,6 +3,8 @@ from flask import Flask, redirect, render_template, request, session
 from functools import wraps 
 
 DATABASE = 'database.db'
+SALT = 'FKY7'
+#we will salt passwords and hash with MD5. this is not the most secure way but for this small project it will do for now.
 
 '''
 #To use the module, you must first create a Connection object that represents the database
@@ -20,8 +22,9 @@ conn.close()
 '''
 
 def password_hash(password):
-    #HASH THE PASSWORD HERE
-    return hashed_pass
+    salt_pass = password + SALT
+    hashed_pass = hashlib.md5(salt_pass.encode())
+    return hashed_pass.hexdigest()
 
 def login_required(function):
     @wraps(function)
@@ -32,18 +35,35 @@ def login_required(function):
     return decorated_func
 
 def register(username, password):
-    #WARNING. PASSWORDS NOT ENCRYPTED YET
+    hashed_pass = password_hash(password)
     connect = sqlite3.connect(DATABASE)
     db = connect.cursor()
     #WARNING PLEASE SANITIZE INPUT 
-    db.execute("INSERT INTO regusers (userid, username, pass) VALUES ({})".format())
+    db.execute("INSERT INTO regusers (username, password) VALUES (\"{}\", \"{}\")".format(username, hashed_pass))
     db.close()
     connect.commit()
     
 def login(username, password):
-    pass
+    #hash password
+    #goto regusers table and 
+    #see if username matches hash
+    #if so return True
+    hashed_pass = password_hash(password)
+    connect = sqlite3.connect(DATABASE)
+    db = connect.cursor()
+    #WARNING PLEASE SANITIZE INPUT 
+    db.execute("SELECT username, password FROM regusers WHERE username = \"{}\"".format(username))
+    user_info_from_db = db.fetchall()
+    db.close()
+    connect.commit()    
+    for returned_entries in user_info_from_db:
+        if hashed_pass in returned_entries:
+            return True
+        else:
+            return False
+            
 
-def test_db():
+def test_db_get_regusers():
     #WARNING. PASSWORDS NOT ENCRYPTED YET
     connect = sqlite3.connect(DATABASE)
     db = connect.cursor()

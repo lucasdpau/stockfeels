@@ -1,5 +1,5 @@
 import time, os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session, redirect
 from functions import login_required
 import functions
 #from flask_session import Session
@@ -20,7 +20,7 @@ def after_request(response):
 
 @app.route('/', methods=['GET'])
 def get_index():
-    test_str = functions.test_db()
+    test_str = functions.test_db_get_regusers()
     return render_template('index.html', test_str = test_str)
 
 
@@ -35,8 +35,16 @@ def get_register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    session.clear()
-    pass
+    if request.method == 'GET':
+        return render_template('login.html')
+    
+    else:
+        submitted_username = request.form.get("username")
+        session.clear()
+        
+        return redirect('/')
+
+
 
 @app.route('/profile', methods=['GET'])
 @login_required
