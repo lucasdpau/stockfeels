@@ -36,3 +36,8 @@ footer {
 .frontimg{
     width: 100%;
 }
+
+.register{
+    text-align: center;
+    background-color: burlywood;
+}
