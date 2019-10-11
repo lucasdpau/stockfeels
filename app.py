@@ -17,7 +17,7 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
-#DeBUGGING PAGES
+#TWO PAGES for debugging/testing
 @app.route('/success', methods=['GET'])
 def success():
     return render_template('test.html')
@@ -27,10 +27,28 @@ def fail():
     return render_template('testfail.html')
 
 
-@app.route('/', methods=['GET'])
+
+@app.route('/', methods=['GET', 'POST'])
 def get_index():
-    test_str = functions.test_db_get_regusers()
-    return render_template('index.html', test_str = test_str)
+    if request.method == 'POST':
+        if not request.form.get("username"):
+            return redirect('/fail')
+        elif not request.form.get("password"):
+            return redirect('/fail')
+            #return apology("must provide password", 403)  
+            
+        submitted_username, submitted_pass = request.form.get("username"), request.form.get("password")
+        if not functions.login(submitted_username, submitted_pass):
+            return redirect('/fail')
+        else:
+            #session["user_id"] = functions.get_user_id(submitted_username) #this may have to be changed to the userid int, instead of username
+            #return redirect('/profile')
+            return redirect('/success')
+
+    elif request.method == 'GET':
+        test_str = functions.test_db_get_regusers()
+        return render_template('index.html', test_str = test_str)     
+
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -41,31 +59,11 @@ def get_register():
     elif request.method == 'POST':
         submitted_username, submitted_pass = request.form.get("username"), request.form.get("password")
         #register functions returns bool depending on if theres a duplicate username
+        #TODO reject empty username/password
         if functions.register(submitted_username, submitted_pass):
-            return render_template('register.html')
-        else:
             return redirect('/')
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    #TODO Fix commented out session functionality
-    #session.clear()
-    if request.method == 'GET':
-        return render_template('login.html')
-    else:
-        if not request.form.get("username"):
-            return redirect('/fail')
-        elif not request.form.get("password"):
-            return redirect('/fail')
-            #return apology("must provide password", 403)  
-            
-        submitted_username, submitted_pass = request.form.get("username"), request.form.get("password")
-        if not functions.login(submitted_username, submitted_pass):
-            return redirect('/fail')
-        
         else:
-            #session["user_id"] = functions.get_user_id(submitted_username) #this may have to be changed to the userid int, instead of username
-            return redirect('/success')
+            return redirect('/fail')
 
 
 @app.route('/profile', methods=['GET'])

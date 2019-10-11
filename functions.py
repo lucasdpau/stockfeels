@@ -30,7 +30,7 @@ def login_required(function):
     @wraps(function)
     def decorated_func(*args, **kwargs):
         if session.get("user_id") is None:
-            return redirect("/login")
+            return redirect("/")
         return function(*args, **kwargs)
     return decorated_func
 
@@ -50,10 +50,7 @@ def register(username, password):
     return True
     
 def login(username, password):
-    #hash password
-    #goto regusers table and 
-    #see if username matches hash
-    #if so return True
+    #hash password, goto regusers table and see if username matches hash. if so return True
     hashed_pass = password_hash(password)
     connect = sqlite3.connect(DATABASE)
     db = connect.cursor()
@@ -95,6 +92,6 @@ def enter_transaction():
     connect = sqlite3.connect(DATABASE)
     db = connect.cursor()
     #WARNING PLEASE SANITIZE INPUT 
-    db.execute("INSERT INTO transactions () VALUES (\"\")")
+    db.execute("INSERT INTO transactions (userid, datetime, stock_name, buy/sell, price, quantity) VALUES (\"\")")
     db.close()
     connect.commit()    

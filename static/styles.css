@@ -24,11 +24,13 @@ footer {
 }
 
 .left{
-    flex: 60%;
+    flex: 40%;
+    background-color: black;
+    color: blanchedalmond;
 }
 
 .right{
-    flex: 40%;
+    flex: 60%;
 }
 
 .frontimg{
