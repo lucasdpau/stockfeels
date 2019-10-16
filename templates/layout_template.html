@@ -14,14 +14,12 @@
                 StockFeels
             </div>
         </header>
-        <nav>
-            <div class="topnavbar">
-                
-            </div>
-        </nav>
         {% block main %}{% endblock %}
         <footer>
             <a href="/">HOME</a>
+            {% if session["user_id"] %}
+            <a href="/logout">LOGOUT</a>
+            {% endif %}
         </footer>
     </body>
 </html>

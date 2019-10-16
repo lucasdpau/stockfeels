@@ -2,10 +2,22 @@
 {% block main %}
     <div>
         <form method="POST">
-            <input type="text" name="stock">
-            <input type="text" name="buysell">
-            <input type="text" name="price">
-            <input type="text" name="quantity">
+            Stock<input type="text" name="stock">
+            <br>
+            Date<input type="date" name="datetime">
+            <br>
+            Buy<input type="radio" name="buysell" value="0">
+            Sell<input type="radio" name="buysell" value="1">
+            <br>
+            Price<input type="text" name="price">
+            <br>
+            Quantity<input type="text" name="quantity">
+            <br>
+            <textarea name="comment" cols="40">Comment here</textarea>
+            <br>
+            Emotion<input type="text" name="emotion">
+            <br>
+            <input type="submit">
         </form>
     </div>
 {% endblock %}

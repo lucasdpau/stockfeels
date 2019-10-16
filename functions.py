@@ -21,12 +21,16 @@ conn.commit()
 conn.close()
 '''
 
+#TODO: all the sql functions have redundancies: sqlite3.connect(), connect.cursor(),  cursor.close(), and connection.commit().
+#perhaps we could reduce redundancy using python decorators?
+
 def password_hash(password):
     salt_pass = password + SALT
     hashed_pass = hashlib.md5(salt_pass.encode())
     return hashed_pass.hexdigest()
 
 def login_required(function):
+    #wrapper to make a function require that the user is logged in 
     @wraps(function)
     def decorated_func(*args, **kwargs):
         if session.get("user_id") is None:
@@ -35,6 +39,7 @@ def login_required(function):
     return decorated_func
 
 def register(username, password):
+    #returns false if unable to register due to duplicate username
     hashed_pass = password_hash(password)
     connect = sqlite3.connect(DATABASE)
     db = connect.cursor() 
@@ -66,6 +71,7 @@ def login(username, password):
             return False
 
 def get_user_id(username):
+    #get the unique user_id number from the database for a given username
     connect = sqlite3.connect(DATABASE)
     db = connect.cursor()
     db.execute("SELECT userid FROM regusers WHERE username =?", (username,))
@@ -77,7 +83,6 @@ def get_user_id(username):
             
 
 def test_db_get_regusers():
-    #WARNING. PASSWORDS NOT ENCRYPTED YET
     connect = sqlite3.connect(DATABASE)
     db = connect.cursor()
     db.execute("SELECT * FROM regusers")
@@ -87,11 +92,30 @@ def test_db_get_regusers():
     return stuff
 
 
-
-def enter_transaction():
+def enter_transaction(userid, datetime, stock_name, buysell, price, quantity, comment, emotion):
     connect = sqlite3.connect(DATABASE)
     db = connect.cursor()
-    #WARNING PLEASE SANITIZE INPUT 
-    db.execute("INSERT INTO transactions (userid, datetime, stock_name, buy/sell, price, quantity) VALUES (\"\")")
+    db.execute("INSERT INTO transactions (userid, datetime, stock_name, buy/sell, price, quantity, comment, emotion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (userid, datetime, stock_name,
+                                                                                                                                                        buysell, price, quantity, comment, emotion))
     db.close()
-    connect.commit()    
+    connect.commit()  
+    return True 
+
+def get_single_transaction(trans_id):
+    connect = sqlite3.connect(DATABASE)
+    db = connect.cursor()
+    db.execute("SELECT * FROM transactions WHERE transaction_id =?", (trans_id,))
+    transaction = db.fetchall()
+    db.close()
+    connect.commit() 
+    return transaction
+    
+def get_users_transactions(user_id):
+    connect = sqlite3.connect(DATABASE)
+    db = connect.cursor()
+    db.execute("SELECT * FROM transactions WHERE user_id =?", (user_id,))
+    user_transactions = db.fetchall()
+    db.close()
+    connect.commit()
+    return user_transactions
+    

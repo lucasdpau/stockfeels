@@ -2,12 +2,10 @@ import time, os
 from flask import Flask, render_template, request, session, redirect
 from functions import login_required
 import functions
-#from flask_session import Session
 
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
-
-#Session(app)
+app.secret_key = "nzxcz,m,as123a"
 
 @app.after_request
 def after_request(response):
@@ -20,12 +18,11 @@ def after_request(response):
 #TWO PAGES for debugging/testing
 @app.route('/success', methods=['GET'])
 def success():
-    return render_template('test.html')
+    return "SUCCESS!"
 
 @app.route('/fail', methods=['GET'])
 def fail():
-    return render_template('testfail.html')
-
+    return "FAIL!"
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -39,37 +36,56 @@ def get_index():
             
         submitted_username, submitted_pass = request.form.get("username"), request.form.get("password")
         if not functions.login(submitted_username, submitted_pass):
-            return redirect('/fail')
+            return "Incorrect username or password"
         else:
-            #session["user_id"] = functions.get_user_id(submitted_username) #this may have to be changed to the userid int, instead of username
-            #return redirect('/profile')
-            return redirect('/success')
+            #setup the session dictionary/object if user successfully logs in
+            session["user_id"] = str(functions.get_user_id(submitted_username))
+            session["username"] = submitted_username
+            return redirect('/')
 
     elif request.method == 'GET':
-        test_str = functions.test_db_get_regusers()
-        return render_template('index.html', test_str = test_str)     
-
+        #checks to see if there are entries in the session object. if yes, then a user has been logged in
+        if 'user_id' in session:
+            #render a "logged in" front page
+            return render_template("profile.html")
+        
+        else:
+            #render a "logged out" front page
+            test_str = functions.test_db_get_regusers()
+            return render_template('index.html', test_str=test_str)     
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def get_register():
+    #logout of any session first
+    if not session.get("user_id") == None:
+        session.clear()
     if request.method == 'GET':
         return render_template('register.html')
     
     elif request.method == 'POST':
+        if not request.form.get("username"):
+            return "You did not enter a username"
+        elif not request.form.get("password"):
+            return "You did not enter a password"
         submitted_username, submitted_pass = request.form.get("username"), request.form.get("password")
         #register functions returns bool depending on if theres a duplicate username
-        #TODO reject empty username/password
+        
+        #successfully register!
         if functions.register(submitted_username, submitted_pass):
+            #auto login after registering
+            session["user_id"] = str(functions.get_user_id(submitted_username))
+            session["username"] = submitted_username            
             return redirect('/')
         else:
-            return redirect('/fail')
+            return "Account name is taken"
 
 
 @app.route('/profile', methods=['GET'])
 @login_required
 def profile():
     #TODO
+    user_transactions = functions.get_users_transactions(session['user_id'])
     return render_template('profile.html')
 
 @app.route('/entry', methods=['GET', 'POST'])
@@ -77,7 +93,31 @@ def profile():
 def entry():
     #TODO
     if request.method == 'POST':
-        pass
+        user_id = session["user_id"]
+        #get the time of transaction
+        if not request.form.get("stock"):
+            return "No stock name given"
+        elif not request.form.get("buysell"):
+            return "Buy or sell?"
+        elif not request.form.get("price"):
+            return "Price?"
+        elif not request.form.get("quantity"):
+            return "Quantity?"
+        elif not request.form.get("comment"):
+            return "Comments?"
+        elif not request.form.get("emotion"):
+            return "Feels?"
+        
+        datetime = '' #TODO
+        stock_name = request.form.get("stock")
+        buysell = request.form.get("buysell")
+        price = request.form.get("price")
+        quantity = request.form.get("quantity")
+        comment = request.form.get("comment")
+        emotion = request.form.get("emotion")
+        
+        functions.enter_transaction(userid, datetime, stock_name, buysell, price, quantity, comment, emotion)
+        
     else:
         return render_template('entry.html')
 
