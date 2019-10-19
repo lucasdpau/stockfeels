@@ -41,3 +41,9 @@ footer {
     text-align: center;
     background-color: burlywood;
 }
+
+.profile_table, td, tr{
+    border-width: 1px;
+    border-color: black;
+    border-style: solid;
+}

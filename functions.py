@@ -92,11 +92,12 @@ def test_db_get_regusers():
     return stuff
 
 
-def enter_transaction(userid, datetime, stock_name, buysell, price, quantity, comment, emotion):
+def enter_transaction(userid, trans_datetime, stock_name, buysell, price, quantity, comment, emotion):
+    entry_datetime = ''
+    #get the time of the user entering the data
     connect = sqlite3.connect(DATABASE)
     db = connect.cursor()
-    db.execute("INSERT INTO transactions (userid, datetime, stock_name, buy/sell, price, quantity, comment, emotion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (userid, datetime, stock_name,
-                                                                                                                                                        buysell, price, quantity, comment, emotion))
+    db.execute("INSERT INTO transactions (userid, trans_datetime, stock_name, buysell, price, quantity, comment, emotion) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (userid, trans_datetime, stock_name, buysell, price, quantity, comment, emotion))
     db.close()
     connect.commit()  
     return True 
@@ -110,12 +111,11 @@ def get_single_transaction(trans_id):
     connect.commit() 
     return transaction
     
-def get_users_transactions(user_id):
+def get_users_transactions(userid):
     connect = sqlite3.connect(DATABASE)
     db = connect.cursor()
-    db.execute("SELECT * FROM transactions WHERE user_id =?", (user_id,))
+    db.execute("SELECT * FROM transactions WHERE userid =?", (userid,))
     user_transactions = db.fetchall()
     db.close()
     connect.commit()
     return user_transactions
-    

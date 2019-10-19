@@ -10,5 +10,49 @@
     </div>
     <div>
         List of transactions and journals here
+        <br>
+        <table class="profile_table">
+            <tr>
+                <td>
+                    Transaction ID
+                </td>
+                <td>
+                    x
+                </td>
+                <td>
+                    Date of Transaction
+                </td>
+                <td>
+                    x
+                </td>
+                <td>
+                    Stock
+                </td>
+                <td>
+                    Buy/Sell
+                </td>
+                <td>
+                    Price
+                </td>
+                <td>
+                    Quantity
+                </td>
+                <td>
+                    Comments
+                </td>
+                <td>
+                    Feels
+                </td>
+            </tr>
+            {% for transaction in user_transactions %}
+            <tr>
+                {% for column in transaction %}
+                <td>
+                    {{ column }} 
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
     </div>
 {% endblock %}

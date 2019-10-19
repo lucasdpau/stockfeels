@@ -15,23 +15,14 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
-#TWO PAGES for debugging/testing
-@app.route('/success', methods=['GET'])
-def success():
-    return "SUCCESS!"
-
-@app.route('/fail', methods=['GET'])
-def fail():
-    return "FAIL!"
-
 
 @app.route('/', methods=['GET', 'POST'])
 def get_index():
     if request.method == 'POST':
         if not request.form.get("username"):
-            return redirect('/fail')
+            return 'Please provide a username'
         elif not request.form.get("password"):
-            return redirect('/fail')
+            return 'Please provide a password'
             #return apology("must provide password", 403)  
             
         submitted_username, submitted_pass = request.form.get("username"), request.form.get("password")
@@ -47,7 +38,7 @@ def get_index():
         #checks to see if there are entries in the session object. if yes, then a user has been logged in
         if 'user_id' in session:
             #render a "logged in" front page
-            return render_template("profile.html")
+            return redirect("/profile")
         
         else:
             #render a "logged out" front page
@@ -81,22 +72,23 @@ def get_register():
             return "Account name is taken"
 
 
-@app.route('/profile', methods=['GET'])
+@app.route('/profile', methods=['GET','POST'])
 @login_required
 def profile():
     #TODO
     user_transactions = functions.get_users_transactions(session['user_id'])
-    return render_template('profile.html')
+    return render_template('profile.html', user_transactions=user_transactions)
 
 @app.route('/entry', methods=['GET', 'POST'])
 @login_required
 def entry():
     #TODO
     if request.method == 'POST':
-        user_id = session["user_id"]
-        #get the time of transaction
+        userid = session["user_id"]
         if not request.form.get("stock"):
             return "No stock name given"
+        elif not request.form.get("trans_datetime"):
+            return "Select time of transaction"
         elif not request.form.get("buysell"):
             return "Buy or sell?"
         elif not request.form.get("price"):
@@ -107,8 +99,8 @@ def entry():
             return "Comments?"
         elif not request.form.get("emotion"):
             return "Feels?"
-        
-        datetime = '' #TODO
+
+        trans_datetime = request.form.get("trans_datetime")
         stock_name = request.form.get("stock")
         buysell = request.form.get("buysell")
         price = request.form.get("price")
@@ -116,7 +108,8 @@ def entry():
         comment = request.form.get("comment")
         emotion = request.form.get("emotion")
         
-        functions.enter_transaction(userid, datetime, stock_name, buysell, price, quantity, comment, emotion)
+        functions.enter_transaction(userid, trans_datetime, stock_name, buysell, price, quantity, comment, emotion)
+        return redirect("/profile")
         
     else:
         return render_template('entry.html')
