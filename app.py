@@ -17,6 +17,9 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
+@app.route("/test", methods=["GET"])
+def test():
+    return render_template("test.html")
 
 @app.route('/', methods=['GET', 'POST'])
 def get_index():
@@ -61,6 +64,11 @@ def get_register():
             return "You did not enter a username"
         elif not request.form.get("password"):
             return "You did not enter a password"
+        elif not request.form.get("confirm_password"):
+            return "You did not re-enter a password"
+        
+        if not request.form.get("password") == request.form.get("confirm_password"):
+            return "Passwords did not match"
         submitted_username, submitted_pass = request.form.get("username"), request.form.get("password")
         #register functions returns bool depending on if theres a duplicate username
         
