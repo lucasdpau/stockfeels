@@ -1,10 +1,12 @@
 import time, os
 from flask import Flask, render_template, request, session, redirect
+#typing in functions.login_required breaks the @decorator
 from functions import login_required
 import functions
 
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
+#secret key for sessions. we need a more secure way of doing this than storing in source code
 app.secret_key = "nzxcz,m,as123a"
 
 @app.after_request
@@ -26,13 +28,13 @@ def get_index():
             #return apology("must provide password", 403)  
             
         submitted_username, submitted_pass = request.form.get("username"), request.form.get("password")
-        if not functions.login(submitted_username, submitted_pass):
-            return "Incorrect username or password"
-        else:
+        if functions.login(submitted_username, submitted_pass):
             #setup the session dictionary/object if user successfully logs in
             session["user_id"] = str(functions.get_user_id(submitted_username))
             session["username"] = submitted_username
-            return redirect('/')
+            return redirect('/')            
+        else:
+            return "Incorrect username or password"
 
     elif request.method == 'GET':
         #checks to see if there are entries in the session object. if yes, then a user has been logged in
@@ -75,14 +77,14 @@ def get_register():
 @app.route('/profile', methods=['GET','POST'])
 @login_required
 def profile():
-    #TODO
+    #shows when the user logs in. Has all their info, shows a list of their entries
     user_transactions = functions.get_users_transactions(session['user_id'])
     return render_template('profile.html', user_transactions=user_transactions)
 
 @app.route('/entry', methods=['GET', 'POST'])
 @login_required
 def entry():
-    #TODO
+    #entry page. Lets the user enter more entries/
     if request.method == 'POST':
         userid = session["user_id"]
         if not request.form.get("stock"):
