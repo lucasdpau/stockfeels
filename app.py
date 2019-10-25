@@ -70,9 +70,7 @@ def get_register():
         if not request.form.get("password") == request.form.get("confirm_password"):
             return "Passwords did not match"
         submitted_username, submitted_pass = request.form.get("username"), request.form.get("password")
-        #register functions returns bool depending on if theres a duplicate username
-        
-        #successfully register!
+        #register functions returns bool depending on if theres a duplicate username, so True if name is available
         if functions.register(submitted_username, submitted_pass):
             #auto login after registering
             session["user_id"] = str(functions.get_user_id(submitted_username))

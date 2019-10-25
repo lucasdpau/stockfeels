@@ -124,8 +124,9 @@ def get_users_transactions(userid):
 def get_entry_datetime():
     connect = sqlite3.connect(DATABASE)
     db = connect.cursor()
-    db.execute("SELECT datetime('now')")
+    db.execute("SELECT strftime('%Y-%m-%dT%H:%M:%S')")
     time_string = db.fetchone()[0]
     db.close()
     connect.commit()
     return time_string
+

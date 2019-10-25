@@ -6,7 +6,7 @@
         </div>
     </nav>
     <div>
-        Welcome, {{ session["username"] }}
+        Welcome, {{ session["username"] }}.
     </div>
     <div>
         List of transactions and journals here
@@ -17,7 +17,7 @@
                     Transaction ID
                 </td>
                 <td>
-                    user_id
+                    user id
                 </td>
                 <td>
                     Date of Transaction
@@ -43,14 +43,22 @@
                 <td>
                     Feels
                 </td>
+                <td>
+                    Link
+                </td>
             </tr>
             {% for transaction in user_transactions %}
             <tr>
+                {{ transaction }}
                 {% for column in transaction %}
                 <td>
                     {{ column }} 
                 </td>
                 {% endfor %}
+                <td>
+                <!-- transaction[0] is the transaction id, but if we change code in functions.py we have to adjust this-->
+                    <a href="/profile?transactionid={{transaction[0]}}">Details TODO SECURITY</a>
+                </td>
             </tr>
             {% endfor %}
         </table>
