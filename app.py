@@ -84,8 +84,9 @@ def get_register():
 @login_required
 def profile():
     #shows when the user logs in. Has all their info, shows a list of their entries
+    trans_id_test = request.args.get("transactionid")
     user_transactions = functions.get_users_transactions(session['user_id'])
-    return render_template('profile.html', user_transactions=user_transactions)
+    return render_template('profile.html', user_transactions=user_transactions, trans_id_test=trans_id_test)
 
 @app.route('/entry', methods=['GET', 'POST'])
 @login_required
