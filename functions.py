@@ -91,6 +91,14 @@ def test_db_get_regusers():
     connect.commit()
     return stuff
 
+def get_entry_datetime():
+    connect = sqlite3.connect(DATABASE)
+    db = connect.cursor()
+    db.execute("SELECT strftime('%Y-%m-%dT%H:%M:%S')")
+    time_string = db.fetchone()[0]
+    db.close()
+    connect.commit()
+    return time_string
 
 def enter_transaction(userid, trans_datetime, stock_name, buysell, price, quantity, comment, emotion):
     entry_datetime = get_entry_datetime()
@@ -121,12 +129,17 @@ def get_users_transactions(userid):
     connect.commit()
     return user_transactions
 
-def get_entry_datetime():
+def check_if_transid_belongs_to_user(userid, transid):
+    #transid must be an int
     connect = sqlite3.connect(DATABASE)
     db = connect.cursor()
-    db.execute("SELECT strftime('%Y-%m-%dT%H:%M:%S')")
-    time_string = db.fetchone()[0]
+    db.execute("SELECT transaction_id FROM transactions WHERE userid =?", (userid,))
+    transactions = db.fetchall()
+    #transactions will be in the format [(1,), (2,), (3,), (4,), (5,)]
     db.close()
     connect.commit()
-    return time_string
-
+    for trans_id_tuples in transactions:
+        if transid in trans_id_tuples:
+            return True
+    return False
+    

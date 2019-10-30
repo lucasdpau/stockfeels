@@ -62,3 +62,19 @@ footer {
     border-radius: 5px;
     justify-content: center;
 }
+
+#header-link a:visited{
+    color: black;
+}
+
+#header-link a:link{
+    color: black;
+}
+
+#header-link a:hover{
+    color: black;
+}
+
+a:active{
+    color:black;
+}

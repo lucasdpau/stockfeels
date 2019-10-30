@@ -84,6 +84,7 @@ def get_register():
 @login_required
 def profile():
     #shows when the user logs in. Has all their info, shows a list of their entries
+    #gets the query string and stores it.
     trans_id_test = request.args.get("transactionid")
     user_transactions = functions.get_users_transactions(session['user_id'])
     return render_template('profile.html', user_transactions=user_transactions, trans_id_test=trans_id_test)
@@ -122,6 +123,23 @@ def entry():
         
     else:
         return render_template('entry.html')
+
+@app.route("/details", methods=["GET"])
+@login_required
+def details():
+    userid = session["user_id"]
+    trans_id = request.args.get("transactionid")
+    #we need trans_id as int type for the check to work
+    try:
+        trans_id_int = int(trans_id)
+    except:
+        return "Invalid transactionid"
+    #Users are only allowed to view their own transactions. This checks to make sure the current user is the one who made the entry
+    user_permission = functions.check_if_transid_belongs_to_user(userid, trans_id_int)
+    if user_permission:
+        return render_template("details.html", trans_id=trans_id)
+    else:
+        return "You don't have permission to view this entry!"
 
 @app.route('/logout', methods=['GET'])
 def logout():

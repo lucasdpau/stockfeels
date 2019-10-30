@@ -1,16 +1,13 @@
 {% extends "layout_template.html" %}
 {% block main %}
-    <nav>
-        <div class="topnavbar">
-            <a href="entry">Add a new entry!</a>
-        </div>
-    </nav>
     <div>
         Welcome, {{ session["username"] }}.
     </div>
     <div>
         List of transactions and journals here
-        <br>
+        <div class="topnavbar">
+            <a href="entry">Add a new entry!</a>
+        </div>
         <table class="profile_table">
             <tr>
                 <td>
