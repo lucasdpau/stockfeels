@@ -19,6 +19,33 @@ conn.commit()
 # We can also close the connection if we are done with it.
 # Just be sure any changes have been committed or they will be lost.
 conn.close()
+
+# we can use the builtin Row object/class to access columns by name/key instead of index
+>>> conn.row_factory = sqlite3.Row
+>>> c = conn.cursor()
+>>> c.execute('select * from stocks')
+<sqlite3.Cursor object at 0x7f4e7dd8fa80>
+>>> r = c.fetchone()
+>>> type(r)
+<class 'sqlite3.Row'>
+>>> tuple(r)
+('2006-01-05', 'BUY', 'RHAT', 100.0, 35.14)
+>>> len(r)
+5
+>>> r[2]
+'RHAT'
+>>> r.keys()
+['date', 'trans', 'symbol', 'qty', 'price']
+>>> r['qty']
+100.0
+>>> for member in r:
+...     print(member)
+...
+2006-01-05
+BUY
+RHAT
+100.0
+35.14
 '''
 
 #TODO: all the sql functions have redundancies: sqlite3.connect(), connect.cursor(),  cursor.close(), and connection.commit().
@@ -86,10 +113,10 @@ def test_db_get_regusers():
     connect = sqlite3.connect(DATABASE)
     db = connect.cursor()
     db.execute("SELECT * FROM regusers")
-    stuff = db.fetchall()
+    selection = db.fetchall()
     db.close()
     connect.commit()
-    return stuff
+    return selection
 
 def get_entry_datetime():
     connect = sqlite3.connect(DATABASE)
