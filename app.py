@@ -84,10 +84,8 @@ def get_register():
 @login_required
 def profile():
     #shows when the user logs in. Has all their info, shows a list of their entries
-    #gets the query string and stores it.
-    trans_id_test = request.args.get("transactionid")
     user_transactions = functions.get_users_transactions(session['user_id'])
-    return render_template('profile.html', user_transactions=user_transactions, trans_id_test=trans_id_test)
+    return render_template('profile.html', user_transactions=user_transactions)
 
 @app.route('/entry', methods=['GET', 'POST'])
 @login_required
@@ -117,7 +115,7 @@ def entry():
         quantity = request.form.get("quantity")
         comment = request.form.get("comment")
         emotion = request.form.get("emotion")
-        
+        #submit changes to the database and then return to the user's profile page
         functions.enter_transaction(userid, trans_datetime, stock_name, buysell, price, quantity, comment, emotion)
         return redirect("/profile")
         
@@ -128,6 +126,7 @@ def entry():
 @login_required
 def details():
     userid = session["user_id"]
+    #gets the query string and stores it.
     trans_id = request.args.get("transactionid")
     #we need trans_id as int type for the check to work
     try:

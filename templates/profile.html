@@ -54,11 +54,22 @@
                 {% endfor %}
                 <td>
                 <!-- transaction[0] is the transaction id, but if we change code in functions.py we have to adjust this-->
-                    <a href="/profile?transactionid={{transaction[0]}}">Details TODO SECURITY</a>
+                    <a href="/details?transactionid={{transaction[0]}}">Details</a>
                 </td>
             </tr>
             {% endfor %}
         </table>
-        IF YOU CLICK DETAILS THE TRANSACTIONID SHOULD SHOW UP HERE: {{ trans_id_test }}
     </div>
+
+    <div id="timezone">
+    </div>
+
+    <script>
+        function getTimeZone() {
+            var date = new Date();
+            var tz = date.getTimezoneOffset();
+            document.getElementById("timezone").innerHTML = tz;
+        }
+        getTimeZone();
+    </script>
 {% endblock %}

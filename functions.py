@@ -143,3 +143,15 @@ def check_if_transid_belongs_to_user(userid, transid):
             return True
     return False
     
+
+#using rows we can store the column names of the database as keys.
+def test_get_users_transactions(userid):
+    connect = sqlite3.connect(DATABASE)
+    connect.row_factory = sqlite3.Row
+    db = connect.cursor()
+    db.execute("SELECT * FROM transactions WHERE userid =?", (userid,))
+    transaction = db.fetchall()
+    #a list of all transaction in row objects. row.keys() returns list of keys
+    db.close()
+    connect.commit() 
+    return transaction
