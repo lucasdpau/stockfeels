@@ -1,9 +1,15 @@
 {% extends "layout_template.html" %}
 {% block main %}
     <div>
-        Details for transaction {{ trans_id }}.
+        Details for transaction {{ trans_id_details[0] }}.
     </div>
     <div>
-        Trends go here!
+        {% for key in trans_id_details.keys() %}
+            {{ key }}: {{ trans_id_details[key] }}
+            <br>
+        {% endfor %}
+    </div>
+    <div>
+        Analysis goes here!
     </div>
 {% endblock %}

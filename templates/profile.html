@@ -1,75 +1,82 @@
 {% extends "layout_template.html" %}
 {% block main %}
-    <div>
-        Welcome, {{ session["username"] }}.
-    </div>
-    <div>
-        List of transactions and journals here
-        <div class="topnavbar">
-            <a href="entry">Add a new entry!</a>
+<div class="split">
+    <div id="left_profile">
+        <div>
+            Welcome, {{ session["username"] }}.
         </div>
-        <table class="profile_table">
-            <tr>
-                <td>
-                    Transaction ID
-                </td>
-                <td>
-                    user id
-                </td>
-                <td>
-                    Date of Transaction
-                </td>
-                <td>
-                    Date of Entry (UTC)
-                </td>
-                <td>
-                    Stock
-                </td>
-                <td>
-                    Buy/Sell
-                </td>
-                <td>
-                    Price
-                </td>
-                <td>
-                    Quantity
-                </td>
-                <td>
-                    Comments
-                </td>
-                <td>
-                    Feels
-                </td>
-                <td>
-                    Link
-                </td>
-            </tr>
-            {% for transaction in user_transactions %}
-            <tr>
-                {{ transaction }}
-                {% for column in transaction %}
-                <td>
-                    {{ column }} 
-                </td>
+        <div>
+            List of transactions and journals here
+            <div class="topnavbar">
+                <a href="entry">Add a new entry!</a>
+            </div>
+            <table class="profile_table">
+                <tr>
+                    <td>
+                        Transaction ID
+                    </td>
+                    <td>
+                        user id
+                    </td>
+                    <td>
+                        Date of Transaction
+                    </td>
+                    <td>
+                        Date of Entry (UTC)
+                    </td>
+                    <td>
+                        Stock
+                    </td>
+                    <td>
+                        Buy/Sell
+                    </td>
+                    <td>
+                        Price
+                    </td>
+                    <td>
+                        Quantity
+                    </td>
+                    <td>
+                        Comments
+                    </td>
+                    <td>
+                        Feels
+                    </td>
+                    <td>
+                        Link
+                    </td>
+                </tr>
+                {% for transaction in user_transactions %}
+                <tr>
+                    {{ transaction }}
+                    {% for column in transaction %}
+                    <td>
+                        {{ column }} 
+                    </td>
+                    {% endfor %}
+                    <td>
+                    <!-- transaction[0] is the transaction id, but if we change code in functions.py we have to adjust this-->
+                        <a href="/details?transactionid={{transaction[0]}}">Details</a>
+                    </td>
+                </tr>
                 {% endfor %}
-                <td>
-                <!-- transaction[0] is the transaction id, but if we change code in functions.py we have to adjust this-->
-                    <a href="/details?transactionid={{transaction[0]}}">Details</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
+            </table>
+        </div>
 
-    <div id="timezone">
-    </div>
+        <div id="timezone">
+        </div>
 
-    <script>
-        function getTimeZone() {
-            var date = new Date();
-            var tz = date.getTimezoneOffset();
-            document.getElementById("timezone").innerHTML = tz;
-        }
-        getTimeZone();
-    </script>
+        <script>
+            function getTimeZone() {
+                var date = new Date();
+                var tz = date.getTimezoneOffset();
+                document.getElementById("timezone").innerHTML = tz;
+            }
+            getTimeZone();
+        </script>
+    </div>
+    <div id="right_profile">
+        Sidebar here!
+    </div>
+</div>
 {% endblock %}

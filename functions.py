@@ -108,16 +108,6 @@ def get_user_id(username):
     for returned_entries in userid_from_db:
         return returned_entries[0]
             
-
-def test_db_get_regusers():
-    connect = sqlite3.connect(DATABASE)
-    db = connect.cursor()
-    db.execute("SELECT * FROM regusers")
-    selection = db.fetchall()
-    db.close()
-    connect.commit()
-    return selection
-
 def get_entry_datetime():
     connect = sqlite3.connect(DATABASE)
     db = connect.cursor()
@@ -139,16 +129,22 @@ def enter_transaction(userid, trans_datetime, stock_name, buysell, price, quanti
     return True 
 
 def get_single_transaction(trans_id):
+    #trans_id works if either int or str. returns a row obj contianing all the info in the transaction
     connect = sqlite3.connect(DATABASE)
+    #using rows we can store the column names of the database as keys. and access values thru both keys or index
+    connect.row_factory = sqlite3.Row
     db = connect.cursor()
     db.execute("SELECT * FROM transactions WHERE transaction_id =?", (trans_id,))
-    transaction = db.fetchall()
+    transaction_tuple = db.fetchone()
     db.close()
     connect.commit() 
-    return transaction
+    return transaction_tuple
     
 def get_users_transactions(userid):
+    #takes either str or int for userid. returns a list of Row objects, each representing a transaction made by specified user.
     connect = sqlite3.connect(DATABASE)
+    #using rows we can store the column names of the database as keys. and access values thru both keys or index
+    connect.row_factory = sqlite3.Row
     db = connect.cursor()
     db.execute("SELECT * FROM transactions WHERE userid =?", (userid,))
     user_transactions = db.fetchall()
@@ -170,6 +166,17 @@ def check_if_transid_belongs_to_user(userid, transid):
             return True
     return False
     
+
+# TEST FUNCTIONS #################
+
+def test_db_get_regusers():
+    connect = sqlite3.connect(DATABASE)
+    db = connect.cursor()
+    db.execute("SELECT * FROM regusers")
+    selection = db.fetchall()
+    db.close()
+    connect.commit()
+    return selection
 
 #using rows we can store the column names of the database as keys.
 def test_get_users_transactions(userid):

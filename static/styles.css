@@ -63,6 +63,13 @@ footer {
     justify-content: center;
 }
 
+#left_profile{
+    flex: 80%;
+}
+#right_profile{
+    flex: 20%;
+}
+
 #header-link a:visited{
     color: black;
 }

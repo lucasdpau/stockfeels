@@ -135,8 +135,10 @@ def details():
         return "Invalid transactionid"
     #Users are only allowed to view their own transactions. This checks to make sure the current user is the one who made the entry
     user_permission = functions.check_if_transid_belongs_to_user(userid, trans_id_int)
+    
+    trans_id_details = functions.get_single_transaction(trans_id)
     if user_permission:
-        return render_template("details.html", trans_id=trans_id)
+        return render_template("details.html", trans_id_details=trans_id_details)
     else:
         return "You don't have permission to view this entry!"
 
