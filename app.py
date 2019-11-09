@@ -47,8 +47,8 @@ def get_index():
         
         else:
             #render a "logged out" front page
-            test_str = functions.test_db_get_regusers()
-            return render_template('index.html', test_str=test_str)     
+            #test_str = functions.test_db_get_regusers()
+            return render_template('index.html')     
 
 
 @app.route('/register', methods=['GET', 'POST'])
