@@ -85,7 +85,22 @@ def get_register():
 def profile():
     #shows when the user logs in. Has all their info, shows a list of their entries
     user_transactions = functions.get_users_transactions(session['user_id'])
-    return render_template('profile.html', user_transactions=user_transactions)
+    #user_transactions is a list of row objects from the sqlite db.
+    
+    #if this list isnt empty, get the keys from the first row object
+    if len(user_transactions) > 0:
+        key_list = user_transactions[0].keys()
+        
+    #shorten comments for preview
+    shortened_comments = {}
+    for transaction in user_transactions:
+        if len(transaction['comment']) > 10:
+            preview_comment = transaction['comment'][:10] + ". . ."
+        else:
+            preview_comment = transaction['comment']
+        shortened_comments[transaction] = preview_comment
+        
+    return render_template('profile.html', user_transactions=user_transactions, key_list=key_list, shortened_comments=shortened_comments)
 
 @app.route('/entry', methods=['GET', 'POST'])
 @login_required

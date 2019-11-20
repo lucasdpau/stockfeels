@@ -16,9 +16,6 @@
                         Transaction ID
                     </td>
                     <td>
-                        user id
-                    </td>
-                    <td>
                         Date of Transaction
                     </td>
                     <td>
@@ -49,11 +46,36 @@
                 {% for transaction in user_transactions %}
                 <tr>
                     {{ transaction }}
-                    {% for column in transaction %}
+                    <!-- key_list
+['transaction_id', 'userid', 'trans_datetime', 'entry_datetime', 'stock_name', 'buysell', 'price', 'quantity', 'comment', 'emotion']
+-->
                     <td>
-                        {{ column }} 
+                        {{ transaction['transaction_id'] }}
                     </td>
-                    {% endfor %}
+                    <td>
+                        {{ transaction['trans_datetime'] }}
+                    </td>
+                    <td class="entry_datetime">
+                        {{ transaction['entry_datetime'] }}
+                    </td>
+                    <td>
+                        {{ transaction['stock_name'] }}
+                    </td>
+                    <td>
+                        {{ transaction['buysell'] }}
+                    </td>
+                    <td>
+                        {{ transaction['price'] }}
+                    </td>
+                    <td>
+                        {{ transaction['quantity'] }}
+                    </td>
+                    <td>
+                        {{ shortened_comments[transaction] }}
+                    </td>
+                    <td>
+                        {{ transaction['emotion'] }}
+                    </td>
                     <td>
                     <!-- transaction[0] is the transaction id, but if we change code in functions.py we have to adjust this-->
                         <a href="/details?transactionid={{transaction[0]}}">Details</a>
