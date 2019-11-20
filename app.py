@@ -1,5 +1,5 @@
 import time, os
-from flask import Flask, render_template, request, session, redirect
+from flask import abort, Flask, render_template, request, session, redirect
 #typing in functions.login_required breaks the @decorator
 from functions import login_required
 import functions
@@ -155,7 +155,8 @@ def details():
     if user_permission:
         return render_template("details.html", trans_id_details=trans_id_details)
     else:
-        return "You don't have permission to view this entry!"
+        #return 403 if user is sneaky and edits query string to see other transactions
+        abort(403)
 
 @app.route('/logout', methods=['GET'])
 def logout():

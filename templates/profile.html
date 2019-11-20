@@ -62,7 +62,11 @@
                         {{ transaction['stock_name'] }}
                     </td>
                     <td>
-                        {{ transaction['buysell'] }}
+                        {% if transaction['buysell'] == '0' %}
+                            Buy
+                        {% else %}
+                            Sell
+                        {% endif %}
                     </td>
                     <td>
                         {{ transaction['price'] }}
