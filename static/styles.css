@@ -50,6 +50,10 @@ footer {
     border-style: solid;
 }
 
+.card{
+    margin-top: 25px;
+}
+
 #login-button{
     background-color: rgb(175, 255, 101);
     font-weight: 600;
@@ -64,10 +68,10 @@ footer {
 }
 
 #left_profile{
-    flex: 80%;
+    flex: 75%;
 }
 #right_profile{
-    flex: 20%;
+    flex: 25%;
 }
 
 #header-link a:visited{
