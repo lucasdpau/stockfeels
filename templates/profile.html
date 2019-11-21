@@ -7,9 +7,29 @@
         </div>
         <div>
             List of transactions and journals here
-            <div class="topnavbar">
-                <a href="entry">Add a new entry!</a>
+            <div>
+                <a href="entry" class="form-control btn-primary">Add a new entry!</a>
             </div>
+            <div class="card" style="width: 24rem;">
+                <div class="card-body">
+                    <h5 class="card-title">STOCK NAME HERE</h5>
+                    <p class="card-text">Comments here</p>
+                    <a href="#" class="card-link">Details</a>
+                </div>
+            </div>
+            
+            {% for transaction in user_transactions %}
+            <div class="card" style="width:24rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ transaction["stock_name"] }}</h5>
+                    <h6 class="card-title">{{ transaction["entry_datetime"] }}</h4>
+                    <p class="card-text">{{ shortened_comments[transaction] }}</p>
+                    <a href="/details?transactionid={{transaction[0]}}">Details</a>
+                </div>
+            </div>
+
+            {% endfor %}
+
             <table class="profile_table">
                 <tr>
                     <td>
@@ -43,12 +63,12 @@
                         Link
                     </td>
                 </tr>
+                <!-- key_list
+['transaction_id', 'userid', 'trans_datetime', 'entry_datetime', 'stock_name', 'buysell', 'price', 'quantity', 'comment', 'emotion']
+-->
                 {% for transaction in user_transactions %}
                 <tr>
                     {{ transaction }}
-                    <!-- key_list
-['transaction_id', 'userid', 'trans_datetime', 'entry_datetime', 'stock_name', 'buysell', 'price', 'quantity', 'comment', 'emotion']
--->
                     <td>
                         {{ transaction['transaction_id'] }}
                     </td>
