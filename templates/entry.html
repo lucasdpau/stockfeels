@@ -1,28 +1,46 @@
 {% extends "layout_template.html" %}
 {% block main %}
     <div>
-        <form method="POST">
+        <form method="POST" class="needs-validation" novalidate>
             <div class="form-group">
                 <label for="entry_stock">Stock</label>
-                <input type="text" name="stock" id="entry_stock" class="form-control">
+                <input type="text" name="stock" id="entry_stock" class="form-control" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please provide a stock symbol.
+                </div>
             </div>
             <div class="form-group">
                 <label for="entry_date">Date</label>
-                <input type="date" name="trans_datetime" id="entry_date" class="form-control">
+                <input type="date" name="trans_datetime" id="entry_date" class="form-control" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+                <div class="invalid-feedback">
+                    Please provide the time of the transaction.
+                </div>
             </div>
             <div id="entry_buysell">
                 <select class="custom-select" name="buysell" id="entry_buy">
                     <option value="0">Buy</option>
                     <option value="1">Sell</option>
-                </select> 
+                </select>
             </div>
             <div>
                 <label for="entry_price">Price</label>
-                <input type="text" name="price" id="entry_price" class="form-control">
+                <input type="text" name="price" id="entry_price" class="form-control" required>
+                <div class="invalid-feedback">
+                    Please enter the price of the transaction.
+                </div>
             </div>
             <div>
                 <label for="entry_quantity">Quantity</label>
-                <input type="text" name="quantity" id="entry_quantity" class="form-control">
+                <input type="text" name="quantity" id="entry_quantity" class="form-control" required>
+                <div class="invalid-feedback">
+                    Please provide the number of shares in the transaction.
+                </div>
             </div>
             <div>
                 <label for="entry_comment">Comments:</label>
@@ -30,9 +48,29 @@
             </div>
             <div class="form-group">
                 <label for="entry_emotion">Emotion</label>
-                <input type="range" class="custom-range" id="entry_emotion" name="emotion" min="1" max="5">    
+                <input type="range" class="custom-range" id="entry_emotion" name="emotion" min="1" max="5">   
             </div>
             <input type="submit" value="Submit" class="form-control btn-secondary">
         </form>
     </div>
+    <script>
+            // Example starter JavaScript for disabling form submissions if there are invalid fields
+            (function() {
+                'use strict';
+                window.addEventListener('load', function() {
+                    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                    var forms = document.getElementsByClassName('needs-validation');
+                    // Loop over them and prevent submission
+                    var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                    });
+                }, false);
+                })();
+    </script>
 {% endblock %}
