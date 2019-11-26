@@ -14,7 +14,7 @@
             <div class="card" style="width:24rem;">
                 <div class="card-body">
                     <h5 class="card-title">{{ transaction["stock_name"] }}</h5>
-                    <h6 class="card-title">{{ transaction["entry_datetime"] }}</h4>
+                    <h6 class="card-title entry_datetime">{{ transaction["entry_datetime"] }}</h6>
                     <p class="card-text">{{ shortened_comments[transaction] }}</p>
                     <a href="/details?transactionid={{transaction[0]}}">Details</a>
                 </div>
@@ -67,7 +67,7 @@
                     <td>
                         {{ transaction['trans_datetime'] }}
                     </td>
-                    <td class="entry_datetime">
+                    <td>
                         {{ transaction['entry_datetime'] }}
                     </td>
                     <td>
@@ -109,8 +109,19 @@
                 var date = new Date();
                 var tz = date.getTimezoneOffset();
                 document.getElementById("timezone").innerHTML = tz;
-            }
+                }
             getTimeZone();
+        </script>
+        <script>
+            function adjustUTC(){
+                var utcDateTimes = document.getElementsByClassName("entry_datetime");
+                var i = 0;
+                for (i=0; i < utcDateTimes.length; i++){
+                    utcDateTimes[i].innerHTML = new Date(utcDateTimes[i].innerHTML);
+                }
+                console.log(utcDateTimes.length);
+            }
+            adjustUTC();
         </script>
     </div>
     <div id="right_profile">
