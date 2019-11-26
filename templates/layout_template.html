@@ -18,10 +18,9 @@
         <nav>
             <div class="topnavbar">
             {% if session["user_id"] %}
-            <a href="/logout">LOGOUT</a>
-            {% else %}
-            <a href="register">REGISTER HERE!</a>
+            <a href="/logout">Logout</a>
             {% endif %}
+            <a href="/about">About</a>
             </div>
         </nav>
         {% block main %}{% endblock %}

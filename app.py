@@ -49,6 +49,10 @@ def get_index():
             #render a "logged out" front page
             #test_str = functions.test_db_get_regusers()
             return render_template('index.html')     
+        
+@app.route("/about", methods=["GET"])
+def about():
+    return render_template("about.html")
 
 
 @app.route('/register', methods=['GET', 'POST'])
