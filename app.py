@@ -85,7 +85,9 @@ def get_register():
 def profile():
     #shows when the user logs in. Has all their info, shows a list of their entries
     user_transactions = functions.get_users_transactions(session['user_id'])
-    #user_transactions is a list of row objects from the sqlite db.
+    user_transactions.reverse()
+    #user_transactions is a list of row objects from the sqlite db. it should be reversed so that the most recent entry is on 
+    #top when the program iterates over the list.
     
     #if this list isnt empty, get the keys from the first row object
     if len(user_transactions) > 0:
