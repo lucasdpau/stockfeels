@@ -5,7 +5,7 @@ from functools import wraps
 DATABASE = 'database.db'
 SALT = 'FKY7'
 #we will salt passwords and hash with MD5. this is not the most secure way but for this small project it will do for now.
-# API Key is pk_c141e91a6055420ca2726bedc1f590b5
+# IEXcloud API Key is pk_c141e91a6055420ca2726bedc1f590b5. please see https://iexcloud.io/docs/api/ for documentation.
 KEY = "pk_c141e91a6055420ca2726bedc1f590b5"
 IEX_API_BASE_URL = "https://cloud.iexapis.com/stable/"
 '''
@@ -168,16 +168,24 @@ def check_if_transid_belongs_to_user(userid, transid):
             return True
     return False
 
-def get_response_object_stock_quote(stock):
+def get_stock_quote_as_response_object(stock):
     #takes in a string, returns a response object in json format.
     if type(stock) != str:
         return False
-    api_url = IEX_API_BASE_URL + "stock/{}/quote?".format(stock) + "token={}".format(KEY)
+    api_url = IEX_API_BASE_URL + "stock/{}/quote?token={}".format(stock, KEY)
     response = requests.get(api_url)
     if not response:
         return False
     response_json_format = response.json()
     return response_json_format
+
+def get_stock_quote_as_plaintext(stock):
+    #takes in a string, returns a plaintext price quote.
+    if type(stock) != str:
+        return False    
+    api_url = IEX_API_BASE_URL + "stock/{}/quote/latestPrice?token={}".format(stock, KEY)
+    response = requests.get(api_url)
+    return response.text
     
 
 # TEST FUNCTIONS #################
