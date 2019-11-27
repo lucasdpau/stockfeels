@@ -103,26 +103,7 @@
 
         <div id="timezone">
         </div>
-
-        <script>
-            function getTimeZone() {
-                var date = new Date();
-                var tz = date.getTimezoneOffset();
-                document.getElementById("timezone").innerHTML = tz;
-                }
-            getTimeZone();
-        </script>
-        <script>
-            function adjustUTC(){
-                var utcDateTimes = document.getElementsByClassName("entry_datetime");
-                var i = 0;
-                for (i=0; i < utcDateTimes.length; i++){
-                    utcDateTimes[i].innerHTML = new Date(utcDateTimes[i].innerHTML);
-                }
-                console.log(utcDateTimes.length);
-            }
-            adjustUTC();
-        </script>
+        <script src="/static/js/profileentrytime.js"></script>
     </div>
     <div id="right_profile">
         Sidebar here!
