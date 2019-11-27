@@ -1,11 +1,13 @@
-import time, os, sqlite3, hashlib
+import time, os, sqlite3, hashlib, requests
 from flask import Flask, redirect, render_template, request, session
 from functools import wraps 
 
 DATABASE = 'database.db'
 SALT = 'FKY7'
 #we will salt passwords and hash with MD5. this is not the most secure way but for this small project it will do for now.
-
+# API Key is pk_c141e91a6055420ca2726bedc1f590b5
+KEY = "pk_c141e91a6055420ca2726bedc1f590b5"
+IEX_API_BASE_URL = "https://cloud.iexapis.com/stable/"
 '''
 #To use the module, you must first create a Connection object that represents the database
 connection = sqlite3.connect('database.db')
@@ -165,6 +167,17 @@ def check_if_transid_belongs_to_user(userid, transid):
         if transid in trans_id_tuples:
             return True
     return False
+
+def get_response_object_stock_quote(stock):
+    #takes in a string, returns a response object in json format.
+    if type(stock) != str:
+        return False
+    api_url = IEX_API_BASE_URL + "stock/{}/quote?".format(stock) + "token={}".format(KEY)
+    response = requests.get(api_url)
+    if not response:
+        return False
+    response_json_format = response.json()
+    return response_json_format
     
 
 # TEST FUNCTIONS #################
@@ -189,3 +202,4 @@ def test_get_users_transactions(userid):
     db.close()
     connect.commit() 
     return transaction
+

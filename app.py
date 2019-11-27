@@ -9,6 +9,8 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 #secret key for sessions. we need a more secure way of doing this than storing in source code
 app.secret_key = "nzxcz,m,as123a"
 
+# API Key is pk_c141e91a6055420ca2726bedc1f590b5
+
 @app.after_request
 def after_request(response):
     #Disable caching
@@ -105,6 +107,8 @@ def profile():
         else:
             preview_comment = transaction['comment']
         shortened_comments[transaction] = preview_comment
+        
+    #TODO quote stocks in profile and compare current price to price at transaction
         
     return render_template('profile.html', user_transactions=user_transactions, key_list=key_list, shortened_comments=shortened_comments)
 
