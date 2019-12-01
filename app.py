@@ -134,8 +134,8 @@ def profile():
             if transaction["buysell"] == '1':
                 stock_info_dict[transaction]["is_profitable"] = not stock_info_dict[transaction]["is_profitable"]
         
-    return render_template('profile.html', user_transactions=user_transactions, key_list=key_list, stock_info_dict=stock_info_dict, 
-                           current_profile_page=current_profile_page)
+    return render_template('profile.html', user_transactions=user_transactions, key_list=key_list, stock_info_dict=stock_info_dict, current_profile_page=current_profile_page,
+                           total_pages=total_pages)
 
 @app.route('/entry', methods=['GET', 'POST'])
 @login_required
