@@ -16,8 +16,12 @@
                 {% else %}
                 <div class="card bg-danger text-white" style="width:24rem;">
                 {% endif %}
+                {% if transaction["buysell"] == '0' %}
+                    <div class="card-header">Bought {{ transaction["stock_name"] }} @ ${{ transaction["price"] }} </div>
+                {% else %}
+                    <div class="card-header">Sold {{ transaction["stock_name"] }} @ {{ transaction["price"] }} </div>
+                {% endif %}
                     <div class="card-body">
-                        <h5 class="card-title">{{ transaction["stock_name"] }} @ {{ transaction["price"] }}</h5>
                         <h6 class="card-title entry_datetime">{{ transaction["entry_datetime"] }}</h6>
                         <p class="card-text">{{ shortened_comments[transaction] }}</p>
                         <a href="/details?transactionid={{transaction[0]}}">Details</a>

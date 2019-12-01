@@ -120,6 +120,9 @@ def profile():
                 stock_quotes[transaction]["is_profitable"] = True
             else:
                 stock_quotes[transaction]["is_profitable"] = False
+            # For selling transactions, reverse the colors
+            if transaction["buysell"] == '1':
+                stock_quotes[transaction]["is_profitable"] = not stock_quotes[transaction]["is_profitable"]
     #TODO quote stocks in profile and compare current price to price at transaction
         
     return render_template('profile.html', user_transactions=user_transactions, key_list=key_list, shortened_comments=shortened_comments, stock_quotes=stock_quotes)
