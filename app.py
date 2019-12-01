@@ -95,14 +95,25 @@ def profile():
     #user_transactions is a list of row objects from the sqlite db. it should be reversed so that the most recent entry is on 
     #top when the program iterates over the list.
     #if this list isnt empty, get the keys from the first row object
-    if len(user_transactions) > 0:
+    number_of_entries = len(user_transactions)
+    if number_of_entries > 0:
         key_list = user_transactions[0].keys()
-        
-    entries_per_page = 4    
+    
+    #paginate the entries so that they aren't all on one page. also default to page 1 if invalid query string
+    requested_page = request.args.get('p','')
+    try:
+        current_profile_page = int(requested_page)
+    except:
+        current_profile_page = 1
+    entries_per_page = 4
+    total_pages = int(number_of_entries/entries_per_page) + 1
+    
+    user_transactions = user_transactions[(entries_per_page * (current_profile_page-1)):(entries_per_page * current_profile_page)]
         
     #shorten comments for preview
     shortened_comments = {}
     stock_quotes = {}
+    stock_info_dict = {}
     for transaction in user_transactions:
         if len(transaction['comment']) > 10:
             preview_comment = transaction['comment'][:10] + ". . ."
@@ -124,9 +135,9 @@ def profile():
             # For selling transactions, reverse the colors
             if transaction["buysell"] == '1':
                 stock_quotes[transaction]["is_profitable"] = not stock_quotes[transaction]["is_profitable"]
-    #TODO quote stocks in profile and compare current price to price at transaction
         
-    return render_template('profile.html', user_transactions=user_transactions, key_list=key_list, shortened_comments=shortened_comments, stock_quotes=stock_quotes)
+    return render_template('profile.html', user_transactions=user_transactions, key_list=key_list, shortened_comments=shortened_comments, stock_quotes=stock_quotes, 
+                           current_profile_page=current_profile_page)
 
 @app.route('/entry', methods=['GET', 'POST'])
 @login_required
