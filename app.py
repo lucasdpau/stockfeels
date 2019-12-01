@@ -201,10 +201,6 @@ def logout():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     Flask.run(app, debug=True, host="0.0.0.0", port=port)
-    
-    
-    
+      
 #add forgetting password/email
-#connect to stock market
-#see instant feedback (red/green arrow) if stock is better/worse than buy price
 #hide transaction/userid
