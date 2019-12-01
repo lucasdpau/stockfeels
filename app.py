@@ -111,32 +111,30 @@ def profile():
     user_transactions = user_transactions[(entries_per_page * (current_profile_page-1)):(entries_per_page * current_profile_page)]
         
     #shorten comments for preview
-    shortened_comments = {}
-    stock_quotes = {}
     stock_info_dict = {}
     for transaction in user_transactions:
+        stock_info_dict[transaction] = {}
         if len(transaction['comment']) > 10:
             preview_comment = transaction['comment'][:10] + ". . ."
         else:
             preview_comment = transaction['comment']
-        shortened_comments[transaction] = preview_comment
+        stock_info_dict[transaction]["preview_comment"] = preview_comment
         
-        stock_quotes[transaction] = {}
         #if an invalid symbol is in the transaction, its an error. set price to 0.
         if functions.get_stock_quote_as_plaintext(transaction["stock_name"]) == "Unknown symbol":
-            stock_quotes[transaction]["current_price"] = 0
-            stock_quotes[transaction]["is_profitable"] = False
+            stock_info_dict[transaction]["current_price"] = 0
+            stock_info_dict[transaction]["is_profitable"] = False
         else:
-            stock_quotes[transaction]["current_price"] = float(functions.get_stock_quote_as_plaintext(transaction["stock_name"]))
-            if stock_quotes[transaction]["current_price"] >= transaction["price"]:
-                stock_quotes[transaction]["is_profitable"] = True
+            stock_info_dict[transaction]["current_price"] = float(functions.get_stock_quote_as_plaintext(transaction["stock_name"]))
+            if stock_info_dict[transaction]["current_price"] >= transaction["price"]:
+                stock_info_dict[transaction]["is_profitable"] = True
             else:
-                stock_quotes[transaction]["is_profitable"] = False
+                stock_info_dict[transaction]["is_profitable"] = False
             # For selling transactions, reverse the colors
             if transaction["buysell"] == '1':
-                stock_quotes[transaction]["is_profitable"] = not stock_quotes[transaction]["is_profitable"]
+                stock_info_dict[transaction]["is_profitable"] = not stock_info_dict[transaction]["is_profitable"]
         
-    return render_template('profile.html', user_transactions=user_transactions, key_list=key_list, shortened_comments=shortened_comments, stock_quotes=stock_quotes, 
+    return render_template('profile.html', user_transactions=user_transactions, key_list=key_list, stock_info_dict=stock_info_dict, 
                            current_profile_page=current_profile_page)
 
 @app.route('/entry', methods=['GET', 'POST'])

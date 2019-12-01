@@ -7,7 +7,7 @@
         </div>
 
         {% for transaction in user_transactions %}
-        {% if stock_quotes[transaction]["is_profitable"] %}
+        {% if stock_info_dict[transaction]["is_profitable"] %}
         <div class="card bg-success text-white" style="width:24rem;">
             {% else %}
         <div class="card bg-danger text-white" style="width:24rem;">
@@ -19,7 +19,7 @@
             {% endif %}
             <div class="card-body">
                 <h6 class="card-title entry_datetime">{{ transaction["entry_datetime"] }}</h6>
-                <p class="card-text">{{ shortened_comments[transaction] }}</p>
+                <p class="card-text">{{ stock_info_dict[transaction]["preview_comment"] }}</p>
                 <a href="/details?transactionid={{transaction[0]}}">Details</a>
             </div>
         </div>
@@ -90,7 +90,7 @@
                     {{ transaction['quantity'] }}
                 </td>
                 <td>
-                    {{ shortened_comments[transaction] }}
+                    {{ stock_info_dict[transaction]["preview_comment"] }}
                 </td>
                 <td>
                     {{ transaction['emotion'] }}
