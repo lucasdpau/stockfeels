@@ -9,16 +9,20 @@
             List of transactions and journals here
             <div>
                 <a href="entry" class="form-control btn-primary">Add a new entry!</a>
-            </div>            
-            {% for transaction in user_transactions %}
-            <div class="card" style="width:24rem;">
-                <div class="card-body">
-                    <h5 class="card-title">{{ transaction["stock_name"] }}</h5>
-                    <h6 class="card-title entry_datetime">{{ transaction["entry_datetime"] }}</h6>
-                    <p class="card-text">{{ shortened_comments[transaction] }}</p>
-                    <a href="/details?transactionid={{transaction[0]}}">Details</a>
-                </div>
             </div>
+            {% for transaction in user_transactions %}
+                {% if stock_quotes[transaction]["is_profitable"] %}
+                <div class="card bg-success text-white" style="width:24rem;">
+                {% else %}
+                <div class="card bg-danger text-white" style="width:24rem;">
+                {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ transaction["stock_name"] }} @ {{ transaction["price"] }}</h5>
+                        <h6 class="card-title entry_datetime">{{ transaction["entry_datetime"] }}</h6>
+                        <p class="card-text">{{ shortened_comments[transaction] }}</p>
+                        <a href="/details?transactionid={{transaction[0]}}">Details</a>
+                    </div>
+                </div>
 
             {% endfor %}
 

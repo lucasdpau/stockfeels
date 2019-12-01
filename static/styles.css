@@ -90,3 +90,11 @@ footer {
 a:active{
     color:black;
 }
+
+.card a:link{
+    color: rgb(53, 218, 240);
+}
+
+.card a:visited{
+    color: rgb(53, 218, 240);
+}

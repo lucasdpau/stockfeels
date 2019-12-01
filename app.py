@@ -101,6 +101,7 @@ def profile():
         
     #shorten comments for preview
     shortened_comments = {}
+    stock_quotes = {}
     for transaction in user_transactions:
         if len(transaction['comment']) > 10:
             preview_comment = transaction['comment'][:10] + ". . ."
@@ -108,9 +109,20 @@ def profile():
             preview_comment = transaction['comment']
         shortened_comments[transaction] = preview_comment
         
+        stock_quotes[transaction] = {}
+        #if an invalid symbol is in the transaction, its an error. set price to 0.
+        if functions.get_stock_quote_as_plaintext(transaction["stock_name"]) == "Unknown symbol":
+            stock_quotes[transaction]["current_price"] = 0
+            stock_quotes[transaction]["is_profitable"] = False
+        else:
+            stock_quotes[transaction]["current_price"] = float(functions.get_stock_quote_as_plaintext(transaction["stock_name"]))
+            if stock_quotes[transaction]["current_price"] >= transaction["price"]:
+                stock_quotes[transaction]["is_profitable"] = True
+            else:
+                stock_quotes[transaction]["is_profitable"] = False
     #TODO quote stocks in profile and compare current price to price at transaction
         
-    return render_template('profile.html', user_transactions=user_transactions, key_list=key_list, shortened_comments=shortened_comments)
+    return render_template('profile.html', user_transactions=user_transactions, key_list=key_list, shortened_comments=shortened_comments, stock_quotes=stock_quotes)
 
 @app.route('/entry', methods=['GET', 'POST'])
 @login_required
