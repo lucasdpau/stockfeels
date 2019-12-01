@@ -121,6 +121,7 @@ def get_entry_datetime():
 
 def enter_transaction(userid, trans_datetime, stock_name, buysell, price, quantity, comment, emotion):
     entry_datetime = get_entry_datetime()
+    stock_name = stock_name.upper()
     #get the time of the user entering the data
     connect = sqlite3.connect(DATABASE)
     db = connect.cursor()
@@ -153,6 +154,15 @@ def get_users_transactions(userid):
     db.close()
     connect.commit()
     return user_transactions
+
+def delete_transaction_by_id(trans_id):
+    #takes a str and deletes thransaction based on primary key
+    connect = sqlite3.connect(DATABASE)
+    db = connect.cursor()
+    db.execute("DELETE FROM transactions WHERE transaction_id =?", (trans_id,))
+    db.close()
+    connect.commit()
+    return True
 
 def check_if_transid_belongs_to_user(userid, transid):
     #transid must be an int

@@ -28,6 +28,7 @@
                 </ul>
             </nav>
         </div>
+        
         {% for transaction in user_transactions %}
         {% if stock_info_dict[transaction]["is_profitable"] %}
         <div class="card bg-success text-white" style="width:24rem;">
