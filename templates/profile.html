@@ -2,119 +2,115 @@
 {% block main %}
 <div class="split">
     <div id="left_profile">
-        <div>
+        <div class="alert alert-secondary">
             Welcome, {{ session["username"] }}.
         </div>
-        <div>
-            List of transactions and journals here
-            <div>
-                <a href="entry" class="form-control btn-primary">Add a new entry!</a>
+
+        {% for transaction in user_transactions %}
+        {% if stock_quotes[transaction]["is_profitable"] %}
+        <div class="card bg-success text-white" style="width:24rem;">
+            {% else %}
+        <div class="card bg-danger text-white" style="width:24rem;">
+            {% endif %}
+            {% if transaction["buysell"] == '0' %}
+            <div class="card-header">Bought {{ transaction["stock_name"] }} @ ${{ transaction["price"] }} </div>
+            {% else %}
+            <div class="card-header">Sold {{ transaction["stock_name"] }} @ {{ transaction["price"] }} </div>
+            {% endif %}
+            <div class="card-body">
+                <h6 class="card-title entry_datetime">{{ transaction["entry_datetime"] }}</h6>
+                <p class="card-text">{{ shortened_comments[transaction] }}</p>
+                <a href="/details?transactionid={{transaction[0]}}">Details</a>
             </div>
-            {% for transaction in user_transactions %}
-                {% if stock_quotes[transaction]["is_profitable"] %}
-                <div class="card bg-success text-white" style="width:24rem;">
-                {% else %}
-                <div class="card bg-danger text-white" style="width:24rem;">
-                {% endif %}
-                {% if transaction["buysell"] == '0' %}
-                    <div class="card-header">Bought {{ transaction["stock_name"] }} @ ${{ transaction["price"] }} </div>
-                {% else %}
-                    <div class="card-header">Sold {{ transaction["stock_name"] }} @ {{ transaction["price"] }} </div>
-                {% endif %}
-                    <div class="card-body">
-                        <h6 class="card-title entry_datetime">{{ transaction["entry_datetime"] }}</h6>
-                        <p class="card-text">{{ shortened_comments[transaction] }}</p>
-                        <a href="/details?transactionid={{transaction[0]}}">Details</a>
-                    </div>
-                </div>
+        </div>
+        {% endfor %}
 
-            {% endfor %}
-
-            <table class="profile_table">
-                <tr>
-                    <td>
-                        Transaction ID
-                    </td>
-                    <td>
-                        Date of Transaction
-                    </td>
-                    <td>
-                        Date of Entry (UTC)
-                    </td>
-                    <td>
-                        Stock
-                    </td>
-                    <td>
-                        Buy/Sell
-                    </td>
-                    <td>
-                        Price
-                    </td>
-                    <td>
-                        Quantity
-                    </td>
-                    <td>
-                        Comments
-                    </td>
-                    <td>
-                        Feels
-                    </td>
-                    <td>
-                        Link
-                    </td>
-                </tr>
-                <!-- key_list
+        <table class="profile_table">
+            <tr>
+                <td>
+                    Transaction ID
+                </td>
+                <td>
+                    Date of Transaction
+                </td>
+                <td>
+                    Date of Entry (UTC)
+                </td>
+                <td>
+                    Stock
+                </td>
+                <td>
+                    Buy/Sell
+                </td>
+                <td>
+                    Price
+                </td>
+                <td>
+                    Quantity
+                </td>
+                <td>
+                    Comments
+                </td>
+                <td>
+                    Feels
+                </td>
+                <td>
+                    Link
+                </td>
+            </tr>
+            <!-- key_list
 ['transaction_id', 'userid', 'trans_datetime', 'entry_datetime', 'stock_name', 'buysell', 'price', 'quantity', 'comment', 'emotion']
 -->
-                {% for transaction in user_transactions %}
-                <tr>
-                    {{ transaction }}
-                    <td>
-                        {{ transaction['transaction_id'] }}
-                    </td>
-                    <td>
-                        {{ transaction['trans_datetime'] }}
-                    </td>
-                    <td>
-                        {{ transaction['entry_datetime'] }}
-                    </td>
-                    <td>
-                        {{ transaction['stock_name'] }}
-                    </td>
-                    <td>
-                        {% if transaction['buysell'] == '0' %}
-                            Buy
-                        {% else %}
-                            Sell
-                        {% endif %}
-                    </td>
-                    <td>
-                        {{ transaction['price'] }}
-                    </td>
-                    <td>
-                        {{ transaction['quantity'] }}
-                    </td>
-                    <td>
-                        {{ shortened_comments[transaction] }}
-                    </td>
-                    <td>
-                        {{ transaction['emotion'] }}
-                    </td>
-                    <td>
-                    <!-- transaction[0] is the transaction id, but if we change code in functions.py we have to adjust this-->
-                        <a href="/details?transactionid={{transaction[0]}}">Details</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </table>
-        </div>
-
+            {% for transaction in user_transactions %}
+            <tr>
+                {{ transaction }}
+                <td>
+                    {{ transaction['transaction_id'] }}
+                </td>
+                <td>
+                    {{ transaction['trans_datetime'] }}
+                </td>
+                <td>
+                    {{ transaction['entry_datetime'] }}
+                </td>
+                <td>
+                    {{ transaction['stock_name'] }}
+                </td>
+                <td>
+                    {% if transaction['buysell'] == '0' %}
+                        Buy
+                    {% else %}
+                        Sell
+                    {% endif %}
+                </td>
+                <td>
+                    {{ transaction['price'] }}
+                </td>
+                <td>
+                    {{ transaction['quantity'] }}
+                </td>
+                <td>
+                    {{ shortened_comments[transaction] }}
+                </td>
+                <td>
+                    {{ transaction['emotion'] }}
+                </td>
+                <td>
+                <!-- transaction[0] is the transaction id, but if we change code in functions.py we have to adjust this-->
+                    <a href="/details?transactionid={{transaction[0]}}">Details</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
         <div id="timezone">
         </div>
         <script src="/static/js/profileentrytime.js"></script>
     </div>
     <div id="right_profile">
         Sidebar here!
+        <div>
+            <a href="entry" class="form-control btn-primary">Add a new entry!</a>
+        </div>
     </div>
 </div>
 {% endblock %}

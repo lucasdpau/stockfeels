@@ -94,10 +94,11 @@ def profile():
     user_transactions.reverse()
     #user_transactions is a list of row objects from the sqlite db. it should be reversed so that the most recent entry is on 
     #top when the program iterates over the list.
-    
     #if this list isnt empty, get the keys from the first row object
     if len(user_transactions) > 0:
         key_list = user_transactions[0].keys()
+        
+    entries_per_page = 4    
         
     #shorten comments for preview
     shortened_comments = {}
