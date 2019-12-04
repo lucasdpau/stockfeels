@@ -108,7 +108,7 @@ def profile():
         current_profile_page = 1
     entries_per_page = 4
     total_pages = int(number_of_entries/entries_per_page) + 1
-    
+    #'shorten' the list of user transactions to only contain the content in the "current page"
     user_transactions = user_transactions[(entries_per_page * (current_profile_page-1)):(entries_per_page * current_profile_page)]
         
     stock_info_dict = {}
@@ -183,13 +183,24 @@ def details():
     try:
         trans_id_int = int(trans_id)
     except:
-        return "Invalid transactionid"
+        abort(404)
     #Users are only allowed to view their own transactions. This checks to make sure the current user is the one who made the entry
     user_permission = functions.check_if_transid_belongs_to_user(userid, trans_id_int)
-    
-    trans_id_details = functions.get_single_transaction(trans_id)
+    transaction_details_row_object = functions.get_single_transaction(trans_id)
+    transaction_details_dict = {}
+    for key in transaction_details_row_object.keys():
+        transaction_details_dict[key] = transaction_details_row_object[key]    
     if user_permission:
-        return render_template("details.html", trans_id_details=trans_id_details)
+        if functions.get_stock_quote_as_plaintext(transaction_details_dict["stock_name"]) != "Unknown symbol":
+            current_price = float(functions.get_stock_quote_as_plaintext(transaction_details_dict["stock_name"]))
+            price_difference = transaction_details_row_object["price"] - current_price
+        else:
+            current_price = 0
+            price_difference = 0
+        transaction_details_dict["current_price"] = current_price
+        transaction_details_dict["price_difference"] = price_difference
+        
+        return render_template("details.html", transaction_details_dict=transaction_details_dict)
     else:
         #return 403 if user is sneaky and edits query string to see other transactions
         abort(403)

@@ -86,4 +86,24 @@
     }, false);
     })();
     </script>
+
+    <script>
+    //AJAX test. We are going to do the pure JS way, but others typically use jquery or other frameworks. start with making a special JS object called XMLHttpRequest
+
+    // Then you need to define its onreadystatechange behavior. This is a function that will be called when the async HTTP request is completed, 
+    //so it defines what is expected to changeon the site. typicall its an anonymous function
+    //The readyState property can change from 0 to 4. 0 = request not initialized. 4 = request finished, response ready.
+    
+    function ajax_request(argument){
+        var xhttp = XMLHttpRequest;
+        xhttp.onreadstatechange = function(){
+            if (aj.readyState == 4 && aj.status == 200)
+            //Do something to the page, but only if the readystate is 4(finished) and status is 200 (OK)
+        };
+        aj.open("GET", /* url */, true);
+        aj.send();
+    }
+    
+    </script>
+
 {% endblock %}

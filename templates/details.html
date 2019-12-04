@@ -1,15 +1,24 @@
 {% extends "layout_template.html" %}
 {% block main %}
     <div>
-        Details for transaction {{ trans_id_details[0] }}.
+        Details for transaction {{ transaction_details_dict["transaction_id"] }}.
     </div>
     <div>
-        {% for key in trans_id_details.keys() %}
-            {{ key }}: {{ trans_id_details[key] }}
+        {% for key in transaction_details_dict %}
+            {{ key }}: {{ transaction_details_dict[key] }}
             <br>
         {% endfor %}
     </div>
     <div>
         Analysis goes here!
+        {% if transaction_details_dict["price_difference"] > 0 %}
+        By making this trade when you did, you've gained a potential ${{transaction_details_dict["price_difference"]}}!
+        {% else %}
+        By making this trade when you did, you lost a potential ${{transaction_details_dict["price_difference"]}}.
+        {% endif %}
+    </div>
+    <div>
+        {{transaction_details_dict}}
+        
     </div>
 {% endblock %}
