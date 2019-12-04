@@ -6,6 +6,7 @@
             Welcome, {{ session["username"] }}.
         </div>
         <div>
+            {% if total_pages != 1 %}
             <nav aria-label="Page navigation">
                 <ul class="pagination">
                     {% if current_profile_page == 1 %}
@@ -27,6 +28,7 @@
                     {% endif %}
                 </ul>
             </nav>
+            {% endif %}
         </div>
         
         {% for transaction in user_transactions %}

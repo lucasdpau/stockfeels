@@ -96,6 +96,7 @@ def profile():
     #top when the program iterates over the list.
     #if this list isnt empty, get the keys from the first row object
     number_of_entries = len(user_transactions)
+    key_list = []
     if number_of_entries > 0:
         key_list = user_transactions[0].keys()
     
@@ -110,9 +111,9 @@ def profile():
     
     user_transactions = user_transactions[(entries_per_page * (current_profile_page-1)):(entries_per_page * current_profile_page)]
         
-    #shorten comments for preview
     stock_info_dict = {}
     for transaction in user_transactions:
+        #shorten comments for preview
         stock_info_dict[transaction] = {}
         if len(transaction['comment']) > 10:
             preview_comment = transaction['comment'][:10] + ". . ."
@@ -126,7 +127,7 @@ def profile():
             stock_info_dict[transaction]["is_profitable"] = False
         else:
             stock_info_dict[transaction]["current_price"] = float(functions.get_stock_quote_as_plaintext(transaction["stock_name"]))
-            if stock_info_dict[transaction]["current_price"] >= transaction["price"]:
+            if stock_info_dict[transaction]["current_price"] > transaction["price"]:
                 stock_info_dict[transaction]["is_profitable"] = True
             else:
                 stock_info_dict[transaction]["is_profitable"] = False
