@@ -85,6 +85,9 @@ def get_register():
         else:
             return "Account name is taken"
 
+@app.route("/registererror", methods=["GET"])
+def registry_error():
+    return "There's an error in your form."
 
 @app.route('/profile', methods=['GET','POST'])
 @login_required
@@ -193,7 +196,7 @@ def details():
     if user_permission:
         if functions.get_stock_quote_as_plaintext(transaction_details_dict["stock_name"]) != "Unknown symbol":
             current_price = float(functions.get_stock_quote_as_plaintext(transaction_details_dict["stock_name"]))
-            price_difference = transaction_details_row_object["price"] - current_price
+            price_difference = round(transaction_details_row_object["price"] - current_price, 2)
         else:
             current_price = 0
             price_difference = 0

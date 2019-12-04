@@ -21,4 +21,26 @@
         {{transaction_details_dict}}
         
     </div>
+    <div>
+        <button id="details_button" onclick="test_ajax()">Press here!</button>
+        <button onclick="test_js()">Press here! 2.0</button>
+        <p id="p_ajax">Test AJAX here!</p>
+    </div>
+
+    <script>
+        function test_ajax(){
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function(){
+                if (this.readyState == 4 && this.status == 200){
+                    document.getElementById("p_ajax").innerHTML = this.responseText;
+                }
+            };
+            xhttp.open("POST","/entry",true);
+            xhttp.send();
+        }
+
+        function test_js(){
+            document.getElementById("p_ajax").innerHTML = "poo";
+        }
+    </script>
 {% endblock %}

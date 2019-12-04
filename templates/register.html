@@ -42,7 +42,7 @@
                     Passwords are case sensitive
             </div>
             <div class="form-row" id="register-submit-button">
-                <input type="submit" class="btn-secondary form-control">
+                <input type="submit" class="btn-secondary form-control" onclick="check_entry()">
             </div>
         </form>
     </div>
@@ -65,5 +65,17 @@
                 });
             }, false);
             })();
+    </script>
+    <script>
+        function check_entry(){
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function(){
+                if (this.readyState == 4 && this.status == 200){
+                    //change document here TODO
+                }
+            };
+            xhttp.open("GET", "/registererror", true);
+            xhttp.send();
+        }
     </script>
 {% endblock %}
