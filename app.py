@@ -176,37 +176,48 @@ def entry():
     else:
         return render_template('entry.html')
 
-@app.route("/details", methods=["GET"])
+@app.route("/details", methods=["GET","POST"])
 @login_required
 def details():
     userid = session["user_id"]
     #gets the query string and stores it.
     trans_id = request.args.get("transactionid")
-    #we need trans_id as int type for the check to work
-    try:
-        trans_id_int = int(trans_id)
-    except:
-        abort(404)
+
     #Users are only allowed to view their own transactions. This checks to make sure the current user is the one who made the entry
-    user_permission = functions.check_if_transid_belongs_to_user(userid, trans_id_int)
-    transaction_details_row_object = functions.get_single_transaction(trans_id)
-    transaction_details_dict = {}
-    for key in transaction_details_row_object.keys():
-        transaction_details_dict[key] = transaction_details_row_object[key]    
-    if user_permission:
-        if functions.get_stock_quote_as_plaintext(transaction_details_dict["stock_name"]) != "Unknown symbol":
-            current_price = float(functions.get_stock_quote_as_plaintext(transaction_details_dict["stock_name"]))
-            price_difference = round(transaction_details_row_object["price"] - current_price, 2)
+    if request.method == "GET":
+        #we need trans_id as int type for the check to work
+        try:
+            trans_id_int = int(trans_id)
+        except:
+            abort(404)        
+        user_permission = functions.check_if_transid_belongs_to_user(userid, trans_id_int)
+        transaction_details_row_object = functions.get_single_transaction(trans_id)
+        transaction_details_dict = {}
+        for key in transaction_details_row_object.keys():
+            transaction_details_dict[key] = transaction_details_row_object[key]    
+        if user_permission:
+            if functions.get_stock_quote_as_plaintext(transaction_details_dict["stock_name"]) != "Unknown symbol":
+                current_price = float(functions.get_stock_quote_as_plaintext(transaction_details_dict["stock_name"]))
+                price_difference = round(transaction_details_row_object["price"] - current_price, 2)
+            else:
+                current_price = 0
+                price_difference = 0
+            transaction_details_dict["current_price"] = current_price
+            transaction_details_dict["price_difference"] = price_difference
+            
+            return render_template("details.html", transaction_details_dict=transaction_details_dict)
         else:
-            current_price = 0
-            price_difference = 0
-        transaction_details_dict["current_price"] = current_price
-        transaction_details_dict["price_difference"] = price_difference
-        
-        return render_template("details.html", transaction_details_dict=transaction_details_dict)
-    else:
-        #return 403 if user is sneaky and edits query string to see other transactions
-        abort(403)
+            #return 403 if user is sneaky and edits query string to see other transactions
+            abort(403)
+    
+    elif request.method == "POST":
+        trans_id = request.form.get("transactionid")
+        stock_name = functions.get_single_transaction(trans_id)["stock_name"]
+        try:
+            current_price = functions.get_stock_quote_as_plaintext(stock_name)
+        except:
+            return "Invalid stock name"
+        return current_price   
 
 @app.route('/logout', methods=['GET'])
 def logout():
