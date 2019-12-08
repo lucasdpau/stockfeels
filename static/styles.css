@@ -75,6 +75,15 @@ footer {
     flex: 25%;
 }
 
+.profile_content{
+    display:flex;
+    flex-flow: column;
+}
+
+.profile_pages{
+    align-self: center;
+}
+
 #header-link a:visited{
     color: black;
 }
