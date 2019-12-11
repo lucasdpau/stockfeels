@@ -74,6 +74,7 @@
             var pass_conf = document.getElementById("password_confirm");
             if (pass != pass_conf){
                 document.getElementById("confirm_label").innerHTML = "Passwords must match!";
+                document.getElementById("confirm_label").classList.add("register_confirm_label")
             }
         }
     </script>

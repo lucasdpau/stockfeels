@@ -96,6 +96,11 @@ footer {
     color: black;
 }
 
+.register_confirm_label{
+    color: red;
+    font-size: large;
+}
+
 a:active{
     color:black;
 }

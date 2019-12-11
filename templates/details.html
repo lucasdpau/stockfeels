@@ -12,9 +12,10 @@
     <div>
         Analysis goes here!
         {% if transaction_details_dict["price_difference"] > 0 %}
-        By making this trade when you did, you've gained a potential ${{transaction_details_dict["price_difference"]}}!
+        By making this trade when you did, you've gained a potential ${{transaction_details_dict["price_difference"]}} per share, or
+        a total of ${{transaction_details_dict["total_price_difference"]}}!
         {% else %}
-        By making this trade when you did, you lost a potential ${{transaction_details_dict["price_difference"]}}.
+        By making this trade when you did, you lost a potential ${{transaction_details_dict["price_difference"]}} per share.
         {% endif %}
     </div>
     <div>
