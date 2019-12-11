@@ -12,9 +12,10 @@
     <div>
         Analysis goes here!
         {% if transaction_details_dict["price_difference"] > 0 %}
-        By making this trade when you did, you've gained a potential ${{transaction_details_dict["price_difference"]}}!
+        By making this trade when you did, you've gained a potential ${{transaction_details_dict["price_difference"]}} per share, or
+        a total of ${{transaction_details_dict["total_price_difference"]}}!
         {% else %}
-        By making this trade when you did, you lost a potential ${{transaction_details_dict["price_difference"]}}.
+        By making this trade when you did, you lost a potential ${{transaction_details_dict["price_difference"]}} per share.
         {% endif %}
     </div>
     <div>
@@ -22,7 +23,7 @@
         
     </div>
     <div>
-        <button id="details_button" onclick="test_ajax()">Press here!</button>
+        <button id="details_button" onclick="test_ajax()">Press here for an up-to-date price of this stock!</button>
         <button onclick="test_js()">Press here! 2.0</button>
         <p id="p_ajax">Test AJAX here!</p>
     </div>
@@ -30,13 +31,16 @@
     <script>
         function test_ajax(){
             var xhttp = new XMLHttpRequest();
+            var trans_id = document.location.search.slice(1);
+            console.log(trans_id);
             xhttp.onreadystatechange = function(){
                 if (this.readyState == 4 && this.status == 200){
                     document.getElementById("p_ajax").innerHTML = this.responseText;
                 }
             };
-            xhttp.open("POST","/entry",true);
-            xhttp.send();
+            xhttp.open("POST","/details",true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send(trans_id);
         }
 
         function test_js(){
