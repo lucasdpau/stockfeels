@@ -6,10 +6,8 @@ import functions
 
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
-#secret key for sessions. we need a more secure way of doing this than storing in source code
-app.secret_key = "nzxcz,m,as123a"
-
-# API Key is pk_c141e91a6055420ca2726bedc1f590b5
+#secret key for sessions. 
+app.secret_key = os.environ.get("SECRET_KEY")
 
 @app.after_request
 def after_request(response):

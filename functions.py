@@ -3,10 +3,10 @@ from flask import Flask, redirect, render_template, request, session
 from functools import wraps 
 
 DATABASE = 'database.db'
-SALT = 'FKY7'
+SALT = os.environ.get("SALT")
 #we will salt passwords and hash with MD5. this is not the most secure way but for this small project it will do for now.
-# IEXcloud API Key is pk_c141e91a6055420ca2726bedc1f590b5. please see https://iexcloud.io/docs/api/ for documentation.
-KEY = "pk_c141e91a6055420ca2726bedc1f590b5"
+# IEXcloud API please see https://iexcloud.io/docs/api/ for documentation.
+KEY = os.environ.get("KEY")
 IEX_API_BASE_URL = "https://cloud.iexapis.com/stable/"
 '''
 #To use the module, you must first create a Connection object that represents the database
