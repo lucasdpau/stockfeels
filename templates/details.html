@@ -4,28 +4,34 @@
         Details for transaction {{ transaction_details_dict["transaction_id"] }}.
     </div>
     <div>
-        {% for key in transaction_details_dict %}
-            {{ key }}: {{ transaction_details_dict[key] }}
-            <br>
-        {% endfor %}
-    </div>
-    <div>
         Analysis goes here!
+        <br>
+        Hello {{ session["username"] }}, on {{transaction_details_dict["trans_datetime"]}}, you bought {{transaction_details_dict["quantity"]}}
+        shares of {{transaction_details_dict["stock_name"]}}, at ${{transaction_details_dict["price"]}} each.
+        <br>
         {% if transaction_details_dict["price_difference"] > 0 %}
         By making this trade when you did, you've gained a potential ${{transaction_details_dict["price_difference"]}} per share, or
         a total of ${{transaction_details_dict["total_price_difference"]}}!
         {% else %}
         By making this trade when you did, you lost a potential ${{transaction_details_dict["price_difference"]}} per share.
         {% endif %}
+        <br>
+        Here's what you had to say about making this trade: {{transaction_details_dict["comment"]}}
+    </div>
+    <div>
+        <button id="details_button" onclick="test_ajax()">Press here for an up-to-date price of this stock!</button>
+        <button onclick="test_js()">Press here! 2.0</button>
+        <p id="p_ajax">Test AJAX here!</p>
     </div>
     <div>
         {{transaction_details_dict}}
         
     </div>
     <div>
-        <button id="details_button" onclick="test_ajax()">Press here for an up-to-date price of this stock!</button>
-        <button onclick="test_js()">Press here! 2.0</button>
-        <p id="p_ajax">Test AJAX here!</p>
+        {% for key in transaction_details_dict %}
+            {{ key }}: {{ transaction_details_dict[key] }}
+            <br>
+        {% endfor %}
     </div>
 
     <script>
