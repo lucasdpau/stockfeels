@@ -4,9 +4,13 @@
         Details for transaction {{ transaction_details_dict["transaction_id"] }}.
     </div>
     <div>
-        Analysis goes here!
-        <br>
-        Hello {{ session["username"] }}, on {{transaction_details_dict["trans_datetime"]}}, you bought {{transaction_details_dict["quantity"]}}
+        Hello {{ session["username"] }}, on {{transaction_details_dict["trans_datetime"]}}, you 
+        {% if transaction_details_dict["buysell"] == 0 %}
+        bought
+        {% else %}
+        sold
+        {% endif %}
+        {{transaction_details_dict["quantity"]}}
         shares of {{transaction_details_dict["stock_name"]}}, at ${{transaction_details_dict["price"]}} each.
         <br>
         {% if transaction_details_dict["price_difference"] > 0 %}
@@ -16,22 +20,18 @@
         By making this trade when you did, you lost a potential ${{transaction_details_dict["price_difference"]}} per share.
         {% endif %}
         <br>
-        Here's what you had to say about making this trade: {{transaction_details_dict["comment"]}}
+        Here's what you had to say about making this trade: 
+        {{transaction_details_dict["comment"]}}
+    </div>
+    <div>
+        Your feelings when making this trade were {{transaction_details_dict["emotion"]}}.
     </div>
     <div>
         <button id="details_button" onclick="test_ajax()">Press here for an up-to-date price of this stock!</button>
-        <button onclick="test_js()">Press here! 2.0</button>
         <p id="p_ajax">Test AJAX here!</p>
     </div>
     <div>
-        {{transaction_details_dict}}
-        
-    </div>
-    <div>
-        {% for key in transaction_details_dict %}
-            {{ key }}: {{ transaction_details_dict[key] }}
-            <br>
-        {% endfor %}
+        Entry created on {{transaction_details_dict["entry_datetime"]}}.
     </div>
 
     <script>
@@ -45,7 +45,8 @@
                 }
             };
             xhttp.open("POST","/details",true);
-            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.setRequestHeader("Content-type", 
+            "application/x-www-form-urlencoded");
             xhttp.send(trans_id);
         }
 
