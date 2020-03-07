@@ -37,7 +37,7 @@ def get_index():
             session["username"] = submitted_username
             return redirect('/')            
         else:
-            return "Incorrect username or password"
+            return render_template('index.html', wrong_password=True)
 
     elif request.method == 'GET':
         #checks to see if there are entries in the session object. if yes, then a user has been logged in

@@ -7,9 +7,14 @@
                 <input type="text" name="username" class="form-control" >
                 Password
                 <input type="password" name="password" class="form-control" >
-                <input type="submit" value="Log In" class="w-25" id="login-button">
+                <input type="submit" value="Log In" class="w-25" id="login-button" onclick="login_ajax()">
             </form>
             <a href="/register" class="btn btn-primary w-25">Register!</a>
+            {% if wrong_password %}
+            <p>
+                Incorrect password/username combination!
+            </p>
+            {%endif%}
         </div>
         <div class="right">
             <img src="/static/stockfeels.jpg" class="frontimg">        
