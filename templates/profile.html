@@ -34,9 +34,9 @@
             
             {% for transaction in user_transactions %}
             {% if stock_info_dict[transaction]["is_profitable"] %}
-            <div class="card bg-success text-white" style="width:24rem;">
+            <div class="card bg-success text-white profile_cards" style="width:24rem;">
             {% else %}
-            <div class="card bg-danger text-white" style="width:24rem;">
+            <div class="card bg-danger text-white profile_cards" style="width:24rem;">
             {% endif %}
                 {% if transaction["buysell"] == '0' %}
                 <div class="card-header">Bought {{ transaction["stock_name"] }} @ ${{ transaction["price"] }} </div>
@@ -57,6 +57,9 @@
         Sidebar here!
         <div>
             <a href="entry" class="form-control btn-primary">Add a new entry!</a>
+        </div>
+        <div class="rightbar_analysis">
+            Analysis summary here!
         </div>
     </div>
 </div>
