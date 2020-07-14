@@ -1,7 +1,7 @@
 {% extends "layout_template.html" %}
 {% block main %}
     <div class="register">
-        <form method="POST" class="register needs-validation" novalidate>
+        <form method="POST" class="register needs-validation" action="/register" novalidate>
             <div class="form-row">
                 <div class="col-md-4 mb-3">
                     <label for="username">Username</label>
@@ -51,8 +51,8 @@
         (function() {
             'use strict';
             window.addEventListener('load', function() {
-                var pass = document.getElementById("password");
-                var pass_conf = document.getElementById("password_confirm");
+                var pass = document.getElementById("password").value;
+                var pass_conf = document.getElementById("password_confirm").value;
                 // Fetch all the forms we want to apply custom Bootstrap validation styles to
                 var forms = document.getElementsByClassName('needs-validation');
                 // Loop over them and prevent submission
@@ -70,8 +70,8 @@
     </script>
     <script>
         function check_pass_match(){
-            var pass = document.getElementById("password");
-            var pass_conf = document.getElementById("password_confirm");
+            var pass = document.getElementById("password").value;
+            var pass_conf = document.getElementById("password_confirm").value;
             if (pass != pass_conf){
                 document.getElementById("confirm_label").innerHTML = "Passwords must match!";
                 document.getElementById("confirm_label").classList.add("register_confirm_label")
